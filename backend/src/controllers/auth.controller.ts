@@ -3,7 +3,7 @@ import { asyncHandler } from "helper/asyncHandler";
 import ApiResponse from "helper/ApiResponse";
 import { validationResult } from "express-validator";
 import ApiError from "@helper/ApiError";
-import User from "@models/User";
+import User from "@models/user.model";
 
 const register = asyncHandler(async (req: Request, res: Response) => {
 	const errors = validationResult(req).formatWith(({ msg }) => msg);
