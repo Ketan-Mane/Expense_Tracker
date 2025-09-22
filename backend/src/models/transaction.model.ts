@@ -4,23 +4,26 @@ import User from "./user.model";
 
 interface TransactionAttributes {
 	id: number;
-	userId: number;
+	userId: string;
 	item?: string;
 	amount: number;
+	date?: Date;
 	createdAt?: Date;
 	updatedAt?: Date;
 }
 
-interface TransactionCreationAttributes extends Optional<TransactionAttributes, "id"> {}
+export interface TransactionCreationAttributes extends Optional<TransactionAttributes, "id"> {}
 
 class Transaction extends Model<TransactionAttributes, TransactionCreationAttributes> implements TransactionAttributes {
 	public id!: number;
-	public userId!: number;
+	public userId!: string;
 	public item?: string;
 	public amount!: number;
+	public date?: Date;
 
 	public readonly createdAt?: Date;
 	public readonly updatedAt?: Date;
+	public readonly deletedAt!: Date;
 }
 
 Transaction.init(
@@ -42,10 +45,16 @@ Transaction.init(
 			type: DataTypes.DECIMAL(10, 2),
 			allowNull: false,
 		},
+		date: {
+			type: DataTypes.DATEONLY,
+			allowNull: true,
+		},
 	},
 	{
 		sequelize,
 		tableName: "Transactions",
+		paranoid: true,
+		defaultScope: { attributes: { exclude: ["userId", "deletedAt"] } },
 	}
 );
 
