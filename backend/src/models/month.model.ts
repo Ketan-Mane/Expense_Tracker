@@ -38,15 +38,17 @@ Month.init(
 	},
 	{
 		sequelize,
-		tableName: "months",
+		tableName: "Months",
+		paranoid: true,
 		timestamps: true,
+		defaultScope: { attributes: { exclude: ["userId", "deletedAt"] } },
 	}
 );
 
 Month.belongsTo(User, { foreignKey: "userId", as: "user" });
 User.hasMany(Month, { foreignKey: "userId", as: "months" });
 Month.hasMany(Transaction, { foreignKey: "monthId", as: "transactions" });
-Transaction.belongsTo(Month, { foreignKey: "monthId", as: "month" });
+Transaction.belongsTo(Month, { foreignKey: "monthId", as: "months" });
 
 export default Month;
 

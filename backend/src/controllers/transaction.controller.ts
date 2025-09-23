@@ -4,20 +4,14 @@ import transactionService from "@services/transaction.service";
 import { Request, Response } from "express";
 
 const getTransactions = asyncHandler(async (req: Request, res: Response) => {
-	const userId = req.user?.id;
-	const transactions = await transactionService.getTransactions({ userId: userId as string });
-	res.status(200).json(new ApiResponse(200, "Success", transactions));
+	const monthId = req.params?.id;
+	const { data: transactions, metadata } = await transactionService.getTransactions({});
+	res.status(200).json(new ApiResponse(200, "Success", { transactions, metadata }));
 });
 
 const createTransaction = asyncHandler(async (req: Request, res: Response) => {
-	const userId = req.user?.id;
-	const { item, amount, date } = req.body;
-	const transaction = await transactionService.createTransaction({
-		userId: userId as string,
-		item,
-		amount,
-		date: date as Date,
-	});
+	const data = req.body;
+	const transaction = await transactionService.createTransaction(data);
 	res.status(201).json(new ApiResponse(201, "Transaction created", { transaction }));
 });
 
@@ -29,9 +23,9 @@ const updateTransaction = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const deleteTransaction = asyncHandler(async (req: Request, res: Response) => {
-    const { id } = req.params;
-    await transactionService.deleteTransaction(id);
-    res.status(200).json(new ApiResponse(200, "Transaction deleted"));
+	const { id } = req.params;
+	await transactionService.deleteTransaction(id);
+	res.status(200).json(new ApiResponse(200, "Transaction deleted"));
 });
 
 export default { getTransactions, createTransaction, updateTransaction, deleteTransaction };

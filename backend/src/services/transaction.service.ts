@@ -1,34 +1,24 @@
 import Transaction, { TransactionCreationAttributes } from "@models/transaction.model";
 import User from "@models/user.model";
-
-interface PaginatedResult<T> {
-	transactions: T[];
-	metadata: {
-		count: number;
-		page: number;
-		limit: number;
-		totalPages: number;
-	};
-}
+import PaginatedResult from "types/pagination";
 
 const getTransactions = async ({
-	userId,
+	monthId = null,
 	page = 1,
 	limit = 10,
 }: {
-	userId: string;
+	monthId?: string | null;
 	page?: number;
 	limit?: number;
 }): Promise<PaginatedResult<Transaction>> => {
-	const { count, rows: transactions } = await Transaction.findAndCountAll({
-		include: { model: User, as: "user", attributes: ["id", "name"] },
-		where: { userId },
+	const { count, rows: data } = await Transaction.findAndCountAll({
+		...(monthId ? { where: { monthId } } : {}),
 		limit,
 		offset: (page - 1) * limit,
 	});
 
-	const metadata = { count: transactions.length, page, limit, totalPages: Math.ceil(count / limit) };
-	return { transactions, metadata };
+	const metadata = { count: data.length, page, limit, totalPages: Math.ceil(count / limit) };
+	return { data: data, metadata };
 };
 
 const createTransaction = async (data: TransactionCreationAttributes): Promise<Transaction> => {

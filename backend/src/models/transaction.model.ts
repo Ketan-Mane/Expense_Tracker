@@ -4,10 +4,11 @@ import User from "./user.model";
 
 interface TransactionAttributes {
 	id: number;
-	userId: string;
+	monthId: string;
 	item?: string;
 	amount: number;
 	date?: Date;
+	paymentMethod?: string;
 	createdAt?: Date;
 	updatedAt?: Date;
 }
@@ -16,10 +17,11 @@ export interface TransactionCreationAttributes extends Optional<TransactionAttri
 
 class Transaction extends Model<TransactionAttributes, TransactionCreationAttributes> implements TransactionAttributes {
 	public id!: number;
-	public userId!: string;
+	public monthId!: string;
 	public item?: string;
 	public amount!: number;
 	public date?: Date;
+	public paymentMethod?: string;
 
 	public readonly createdAt?: Date;
 	public readonly updatedAt?: Date;
@@ -33,7 +35,7 @@ Transaction.init(
 			defaultValue: DataTypes.UUIDV4,
 			primaryKey: true,
 		},
-		userId: {
+		monthId: {
 			type: DataTypes.UUID,
 			allowNull: false,
 		},
@@ -49,6 +51,10 @@ Transaction.init(
 			type: DataTypes.DATEONLY,
 			allowNull: true,
 		},
+		paymentMethod: {
+			type: DataTypes.ENUM("Cash", "Credit Card", "Debit Card", "UPI", "Net Banking", "Other"),
+			allowNull: true,
+		},
 	},
 	{
 		sequelize,
@@ -58,6 +64,4 @@ Transaction.init(
 	}
 );
 
-Transaction.belongsTo(User, { foreignKey: "userId", as: "user" });
-User.hasMany(Transaction, { foreignKey: "userId", as: "transactions" });
 export default Transaction;
