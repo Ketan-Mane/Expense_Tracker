@@ -5,6 +5,8 @@ import authRouter from "@routes/auth.route";
 import authMiddleware from "@middlewares/auth.middleware";
 import transactionRouter from "@routes/transaction.route";
 import monthRouter from "@routes/month.route";
+import categoryRouter from "@routes/category.route";
+import budgetRouter from "@routes/budget.route";
 
 const app: Application = express();
 
@@ -16,6 +18,8 @@ app.use("/api/auth", authRouter);
 app.use(authMiddleware);
 app.use("/api/transactions", transactionRouter);
 app.use("/api/months", monthRouter);
+app.use("/api/categories", categoryRouter);
+app.use("/api/budgets", budgetRouter);
 
 app.use(errorHandler);
 

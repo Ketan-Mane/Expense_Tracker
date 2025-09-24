@@ -5,10 +5,12 @@ import User from "./user.model";
 interface TransactionAttributes {
 	id: number;
 	monthId: string;
+	categoryId: string;
 	item?: string;
 	amount: number;
 	date?: Date;
 	paymentMethod?: string;
+	isRecurring?: boolean;
 	createdAt?: Date;
 	updatedAt?: Date;
 }
@@ -18,10 +20,12 @@ export interface TransactionCreationAttributes extends Optional<TransactionAttri
 class Transaction extends Model<TransactionAttributes, TransactionCreationAttributes> implements TransactionAttributes {
 	public id!: number;
 	public monthId!: string;
+	public categoryId!: string;
 	public item?: string;
 	public amount!: number;
 	public date?: Date;
 	public paymentMethod?: string;
+	public isRecurring?: boolean;
 
 	public readonly createdAt?: Date;
 	public readonly updatedAt?: Date;
@@ -38,6 +42,16 @@ Transaction.init(
 		monthId: {
 			type: DataTypes.UUID,
 			allowNull: false,
+			references: { model: "Months", key: "id" },
+			onUpdate: "CASCADE",
+			onDelete: "CASCADE",
+		},
+		categoryId: {
+			type: DataTypes.UUID,
+			allowNull: false,
+			references: { model: "Categories", key: "id" },
+			onUpdate: "CASCADE",
+			onDelete: "SET NULL",
 		},
 		item: {
 			type: DataTypes.STRING,
@@ -54,6 +68,11 @@ Transaction.init(
 		paymentMethod: {
 			type: DataTypes.ENUM("Cash", "Credit Card", "Debit Card", "UPI", "Net Banking", "Other"),
 			allowNull: true,
+		},
+		isRecurring: {
+			type: DataTypes.BOOLEAN,
+			allowNull: true,
+			defaultValue: false,
 		},
 	},
 	{
