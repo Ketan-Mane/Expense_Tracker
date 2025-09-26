@@ -5,9 +5,9 @@ import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle }
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import type { Route } from "./+types/login";
-import { LoginSchema, type LoginInput } from "~/schemas/auth/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useLogin from "~/features/auth/hooks/useLogin";
+import { LoginSchema, type LoginForm } from "~/features/auth/validators/login";
 
 export function loader() {
 	return null; // explicitly says "no data needed"
@@ -33,7 +33,7 @@ export default function Login() {
 		},
 	});
 
-	const handleSubmit = async (data: LoginInput) => {
+	const handleSubmit = async (data: LoginForm) => {
 		await mutation.mutateAsync(data);
 	};
 

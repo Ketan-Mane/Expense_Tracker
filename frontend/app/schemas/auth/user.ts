@@ -1,4 +1,5 @@
 import z from "zod";
+import type { MetaData } from "../metadata";
 
 export const UserSchema = z.object({
 	id: z.uuidv4(),
@@ -9,3 +10,8 @@ export const UserSchema = z.object({
 });
 
 export type User = z.infer<typeof UserSchema>;
+
+export type UsersResponse = {
+	users: User[];
+	metadata: MetaData;
+};

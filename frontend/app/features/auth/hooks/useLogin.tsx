@@ -11,9 +11,8 @@ const useLogin = () => {
 		mutationFn: login,
 		onSuccess: (responseData) => {
 			const { data } = responseData;
-			const user = data.user as User;
-			dispatch(setUser(user));
-			console.log("user logged in", user);
+			if (data?.user === null) return;
+			dispatch(setUser(data?.user));
 		},
 		onError: (error) => {
 			console.error("Login failed", error);
