@@ -14,6 +14,6 @@ export const signup = async (payload: SignupForm) => {
 };
 
 export const verifyAuth = async () => {
-	const { data } = await axiosInstance.post<LoginResponse>("/auth/me");
+	const { data } = await axiosInstance.get<LoginResponse>("/auth/me");
 	return data.data?.user;
 };
