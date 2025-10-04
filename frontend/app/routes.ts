@@ -6,5 +6,5 @@ export default [
 		route("/signup", "routes/auth/signup.tsx"),
 	]),
 
-	route("", "./layout/protected-layout.tsx", [route("", "./layout/layout.tsx", [index("routes/home.tsx")])]),
+	route("", "./layout/protected-layout.tsx", [index("routes/home.tsx")]),
 ] satisfies RouteConfig;
