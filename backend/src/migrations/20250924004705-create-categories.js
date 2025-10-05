@@ -13,7 +13,7 @@ module.exports = {
 			},
 			userId: {
 				type: DataTypes.UUID,
-				allowNull: false,
+				allowNull: true,
 				references: { model: "Users", key: "id" },
 				onUpdate: "CASCADE",
 				onDelete: "CASCADE",
@@ -21,6 +21,10 @@ module.exports = {
 			name: {
 				type: DataTypes.STRING,
 				allowNull: false,
+			},
+			isDefault: {
+				type: DataTypes.BOOLEAN,
+				defaultValue: false,
 			},
 			color: {
 				type: DataTypes.STRING,

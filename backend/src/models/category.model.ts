@@ -5,8 +5,9 @@ import Transaction from "./transaction.model";
 
 interface CategoryAttributes {
 	id: string;
-	userId: string;
+	userId?: string;
 	name: string;
+	isDefault?: boolean;
 	color?: string;
 	icon?: string;
 	createdAt?: Date;
@@ -19,6 +20,7 @@ class Category extends Model<CategoryAttributes, CategoryCreationAttributes> {
 	public id!: string;
 	public userId!: string;
 	public name!: string;
+	public isDefault?: boolean;
 	public color?: string;
 	public icon?: string;
 	public readonly createdAt?: Date;
@@ -34,7 +36,7 @@ Category.init(
 		},
 		userId: {
 			type: DataTypes.UUID,
-			allowNull: false,
+			allowNull: true,
 			references: { model: "Users", key: "id" },
 			onUpdate: "CASCADE",
 			onDelete: "CASCADE",
@@ -42,6 +44,10 @@ Category.init(
 		name: {
 			type: DataTypes.STRING,
 			allowNull: false,
+		},
+		isDefault: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
 		},
 		color: {
 			type: DataTypes.STRING,

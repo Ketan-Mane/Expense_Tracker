@@ -4,40 +4,40 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
+import { CATEGORY_COLORS } from "~/lib/constant";
+import useCreateCategory from "../hooks/useCreateCategory";
+import { toast } from "sonner";
 
 interface CategoryFormProps {
 	category?: Category;
-	onSave: (category: Omit<Category, "id">) => void;
-	onCancel: () => void;
 }
 
-const colorOptions = [
-	"var(--color-chart-1)",
-	"var(--color-chart-2)",
-	"var(--color-chart-3)",
-	"var(--color-chart-4)",
-	"var(--color-chart-5)",
-	"#8B5CF6",
-	"#F59E0B",
-	"#10B981",
-	"#EF4444",
-	"#3B82F6",
-	"#EC4899",
-	"#6366F1",
-];
+const CategoryForm = ({ category }: CategoryFormProps) => {
+	const { mutateAsync: createCategory } = useCreateCategory();
 
-const CategoryForm = ({ category,  onCancel }: CategoryFormProps) => {
 	const form = useForm({
 		resolver: zodResolver(CategorySchema),
+		defaultValues: {
+			id: category?.id || "",
+			name: category?.name || "",
+			color: category?.color || CATEGORY_COLORS[0],
+		},
 	});
 
-	const handleSubmit = (data: Category) => {
-		console.log(data);
+	console.log(form.getFieldState("color"));
+	console.log(form.getFieldState("name"));
+
+	const handleSubmit = async (data: Category) => {
+		await createCategory(data, {
+			onSuccess: () => {
+				toast.success("Category added successfully");
+			},
+		});
 	};
 
 	return (
 		<Form {...form}>
-			<form onSubmit={form.handleSubmit(handleSubmit)}>
+			<form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
 				<FormField
 					name="name"
 					control={form.control}
@@ -73,27 +73,33 @@ const CategoryForm = ({ category,  onCancel }: CategoryFormProps) => {
 						<FormItem>
 							<FormLabel>Color</FormLabel>
 							<FormControl>
-								{colorOptions.map((color) => (
-									<button
-										key={color}
-										type="button"
-										className={`w-8 h-8 rounded-full border-2 ${
-											form.getValues("color") === color ? "border-foreground" : "border-border"
-										}`}
-										style={{ backgroundColor: color }}
-										onClick={() => field.onChange(color)}
-									/>
-								))}
+								<div className="flex flex-wrap gap-2">
+									{CATEGORY_COLORS.map((color) => (
+										<button
+											key={color}
+											type="button"
+											className={`w-8 h-8 rounded-full border-2 ${
+												form.getValues("color") === color
+													? "border-foreground"
+													: "border-border"
+											}`}
+											style={{ backgroundColor: color }}
+											onClick={() => field.onChange(color)}
+										/>
+									))}
+								</div>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
 
-				<Button type="button" variant="outline" onClick={onCancel}>
+				{/* <Button type="button" variant="outline" onClick={onCancel}>
 					Cancel
-				</Button>
-				<Button type="submit">{category ? "Update Category" : "Create Category"}</Button>
+				</Button> */}
+				<div className="flex justify-end">
+					<Button type="submit">{category ? "Update Category" : "Create Category"}</Button>
+				</div>
 			</form>
 		</Form>
 	);
