@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router";
-import Login from "~/features/auth/components/login";
+import Login from "~/features/auth/components/Login";
 import type { RootState } from "~/store/store";
 
 export const meta = () => {

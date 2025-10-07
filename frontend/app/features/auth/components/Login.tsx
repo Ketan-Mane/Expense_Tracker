@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
-import { Form, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import useLogin from "~/features/auth/hooks/useLogin";
@@ -49,7 +49,9 @@ export default function Login() {
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel htmlFor="email">Email</FormLabel>
-										<Input {...field} />
+										<FormControl>
+											<Input {...field} />
+										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
@@ -60,7 +62,9 @@ export default function Login() {
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel htmlFor="password">Password</FormLabel>
-										<Input type="password" {...field} />
+										<FormControl>
+											<Input type="password" {...field} />
+										</FormControl>
 										<FormMessage />
 										<Link
 											to="/forgot-password"

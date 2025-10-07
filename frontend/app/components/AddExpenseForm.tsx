@@ -6,7 +6,7 @@ import { Label } from "./ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { PlusCircle } from "lucide-react";
 import { toast } from "sonner";
-import useCategories from "~/features/category/hooks/useCategories";
+import useCategories from "~/features/category/hooks/use-categories";
 import type { Category } from "~/features/category/types/category";
 
 export function AddExpenseForm() {

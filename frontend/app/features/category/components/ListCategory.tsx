@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import type { Category } from "../types/category";
-import useCategories from "../hooks/useCategories";
-import useDeleteCategory from "../hooks/useDeleteCategory";
+import useCategories from "../hooks/use-categories";
+import useDeleteCategory from "../hooks/use-delete-category";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
 import { Edit } from "lucide-react";
 import Modal from "~/components/common/modal";
 import { Button } from "~/components/ui/button";
-import CategoryForm from "./category-form";
+import CategoryForm from "./CategoryForm";
 import ConfirmModal from "~/components/common/confirm-modal";
 import { Badge } from "~/components/ui/badge";
 

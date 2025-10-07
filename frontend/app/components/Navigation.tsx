@@ -1,6 +1,4 @@
-import { useState } from "react";
-import { Button } from "./ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import { BarChart3, Settings2, Home } from "lucide-react";
 
 interface NavigationProps {

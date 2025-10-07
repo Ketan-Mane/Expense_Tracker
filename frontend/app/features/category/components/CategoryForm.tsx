@@ -5,9 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { CATEGORY_COLORS } from "~/lib/constant";
-import useCreateCategory from "../hooks/useCreateCategory";
+import useCreateCategory from "../hooks/use-create-category";
 import { toast } from "sonner";
-import useUpdateCategory from "../hooks/useUpdateCategory";
+import useUpdateCategory from "../hooks/use-update-category";
 
 interface CategoryFormProps {
 	category?: Category;

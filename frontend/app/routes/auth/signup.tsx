@@ -1,4 +1,4 @@
-import SignUp from "~/features/auth/components/signup";
+import SignUp from "~/features/auth/components/Signup";
 
 export const meta = () => {
 	return [

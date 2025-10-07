@@ -2,9 +2,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/com
 import { Button } from "~/components/ui/button";
 import { Plus, Settings2 } from "lucide-react";
 import Modal from "~/components/common/modal";
-import CategoryForm from "~/features/category/components/category-form";
+import CategoryForm from "~/features/category/components/CategoryForm";
 import { formatCurrency } from "~/lib/utils";
-import ListCategory from "~/features/category/components/list-category";
+import ListCategory from "~/features/category/components/ListCategory";
 
 export function CategoryManager() {
 	const totalBudget = 10000;
