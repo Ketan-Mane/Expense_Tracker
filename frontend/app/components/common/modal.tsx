@@ -4,8 +4,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 interface ModalProps {
 	title: string;
 	description?: string;
-	button:  ReactElement<any>; // Button (HTML or shadcn)
-	render: ReactNode; // Content inside modal
+	button: ReactElement<any>; // Button (HTML or shadcn)
+	render: (close: () => void) => ReactNode; // Content inside modal
 }
 
 const Modal = ({ title, description, render, button }: ModalProps) => {
@@ -27,7 +27,7 @@ const Modal = ({ title, description, render, button }: ModalProps) => {
 					<DialogTitle>{title}</DialogTitle>
 					{description && <DialogDescription>{description}</DialogDescription>}
 				</DialogHeader>
-				{render}
+				{render(() => setOpen(false))}
 			</DialogContent>
 		</Dialog>
 	);

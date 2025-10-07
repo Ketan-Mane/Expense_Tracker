@@ -7,13 +7,16 @@ import { Button } from "~/components/ui/button";
 import { CATEGORY_COLORS } from "~/lib/constant";
 import useCreateCategory from "../hooks/useCreateCategory";
 import { toast } from "sonner";
+import useUpdateCategory from "../hooks/useUpdateCategory";
 
 interface CategoryFormProps {
 	category?: Category;
+	close?: () => void;
 }
 
-const CategoryForm = ({ category }: CategoryFormProps) => {
-	const { mutateAsync: createCategory } = useCreateCategory();
+const CategoryForm = ({ category, close }: CategoryFormProps) => {
+	const { mutateAsync: createCategory, isPending: isCreating } = useCreateCategory();
+	const { mutateAsync: updateCategory, isPending: isUpdating } = useUpdateCategory();
 
 	const form = useForm({
 		resolver: zodResolver(CategorySchema),
@@ -24,13 +27,35 @@ const CategoryForm = ({ category }: CategoryFormProps) => {
 		},
 	});
 
-	console.log(form.getFieldState("color"));
-	console.log(form.getFieldState("name"));
+	console.log("id", form.getFieldState("id"));
+	console.log("userId", form.getFieldState("userId"));
+	console.log("name", form.getFieldState("name"));
+	console.log("color", form.getFieldState("color"));
+	console.log("isDefault", form.getFieldState("isDefault"));
+	console.log("icon", form.getFieldState("icon"));
+	console.log("createdAt", form.getFieldState("createdAt"));
+	console.log("updatedAt", form.getFieldState("updatedAt"));
 
 	const handleSubmit = async (data: Category) => {
+		if (category) {
+			await updateCategory(
+				{ id: category.id, payload: data },
+				{
+					onSuccess: () => {
+						toast.success("Category updated successfully");
+						if (close) close();
+					},
+					onError: (error) => {
+						toast.error(error.message);
+					},
+				},
+			);
+			return;
+		}
 		await createCategory(data, {
 			onSuccess: () => {
 				toast.success("Category added successfully");
+				if (close) close();
 			},
 		});
 	};
@@ -98,7 +123,9 @@ const CategoryForm = ({ category }: CategoryFormProps) => {
 					Cancel
 				</Button> */}
 				<div className="flex justify-end">
-					<Button type="submit">{category ? "Update Category" : "Create Category"}</Button>
+					<Button isProcessing={isCreating || isUpdating} type="submit">
+						{category ? "Update Category" : "Create Category"}
+					</Button>
 				</div>
 			</form>
 		</Form>

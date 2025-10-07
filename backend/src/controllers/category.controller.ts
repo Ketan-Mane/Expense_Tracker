@@ -14,24 +14,24 @@ const getCategories = asyncHandler(async (req: Request, res: Response) => {
 
 const createCategory = asyncHandler(async (req: Request, res: Response) => {
 	const userId = req.user?.id as string;
-	const { name } = req.body;
-	const category = await categoryService.createCategory({ name, userId });
+	const { name, color } = req.body;
+	const category = await categoryService.createCategory({ name, userId, color });
 	res.status(201).json(new ApiResponse(201, "Category created", category));
 });
 
 const updateCategory = asyncHandler(async (req: Request, res: Response) => {
 	const userId = req.user?.id as string;
 	const { id } = req.params;
-	const { name } = req.body;
-	const category = await categoryService.updateCategory({ id, name, userId });
+	const { name, color } = req.body;
+	const category = await categoryService.updateCategory({ id, name, userId, color });
 	res.status(200).json(new ApiResponse(200, "Category updated", category));
 });
 
 const deleteCategory = asyncHandler(async (req: Request, res: Response) => {
-    const userId = req.user?.id as string;
-    const { id } = req.params;
-    await categoryService.deleteCategory({ id, userId });
-    res.status(200).json(new ApiResponse(200, "Category deleted"));
+	const userId = req.user?.id as string;
+	const { id } = req.params;
+	await categoryService.deleteCategory({ id, userId });
+	res.status(200).json(new ApiResponse(200, "Category deleted"));
 });
 
 export default { getCategories, createCategory, updateCategory, deleteCategory };

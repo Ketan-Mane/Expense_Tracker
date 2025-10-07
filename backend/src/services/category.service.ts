@@ -26,12 +26,13 @@ const createCategory = async (data: CategoryCreationAttributes) => {
 	return Category.create(data);
 };
 
-const updateCategory = async (data: { id: string; name: string; userId: string }) => {
+const updateCategory = async (data: { id: string; name: string; userId: string, color?: string }) => {
 	const category = await Category.findOne({ where: { id: data.id, userId: data.userId } });
 	if (!category) {
 		throw new Error("Category not found");
 	}
 	category.name = data.name;
+	category.color = data.color;
 	await category.save();
 	return category;
 };

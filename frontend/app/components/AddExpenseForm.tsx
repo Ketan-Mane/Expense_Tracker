@@ -9,18 +9,6 @@ import { toast } from "sonner";
 import useCategories from "~/features/category/hooks/useCategories";
 import type { Category } from "~/features/category/types/category";
 
-const categories = [
-	"Food & Dining",
-	"Transportation",
-	"Shopping",
-	"Entertainment",
-	"Bills & Utilities",
-	"Healthcare",
-	"Education",
-	"Travel",
-	"Other",
-];
-
 export function AddExpenseForm() {
 	const [description, setDescription] = useState("");
 	const [amount, setAmount] = useState("");
@@ -30,12 +18,10 @@ export function AddExpenseForm() {
 	const { data } = useCategories();
 
 	useEffect(() => {
-		if (data?.categories) {
-			setCategories(data?.categories);
+		if (data?.data) {
+			setCategories(data?.data);
 		}
 	}, [data]);
-
-	console.log(data);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();

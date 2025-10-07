@@ -2,7 +2,7 @@ import { useState } from "react";
 import { redirect, type MetaArgs } from "react-router";
 import { AddExpenseForm } from "~/components/AddExpenseForm";
 import { CategoryBreakdown } from "~/components/CategoryBreakdown";
-import { CategoryManager } from "~/components/CategoryManager";
+import { CategoryManager } from "~/features/category/components/CategoryManager";
 import { ExpenseOverview } from "~/components/ExpenseOverview";
 import Header from "~/components/header/header";
 import { Navigation } from "~/components/Navigation";
