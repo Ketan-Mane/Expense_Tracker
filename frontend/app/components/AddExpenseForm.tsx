@@ -8,6 +8,7 @@ import { PlusCircle } from "lucide-react";
 import { toast } from "sonner";
 import useCategories from "~/features/category/hooks/use-categories";
 import type { Category } from "~/features/category/types/category";
+import TransactionForm from "~/features/transaction/components/TransactionForm";
 
 export function AddExpenseForm() {
 	const [description, setDescription] = useState("");
@@ -50,49 +51,7 @@ export function AddExpenseForm() {
 				<CardDescription>Quickly add a new expense to track your spending</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<form onSubmit={handleSubmit} className="space-y-4">
-					<div className="space-y-2">
-						<Label htmlFor="description">Description</Label>
-						<Input
-							id="description"
-							placeholder="Enter expense description"
-							value={description}
-							onChange={(e) => setDescription(e.target.value)}
-						/>
-					</div>
-
-					<div className="space-y-2">
-						<Label htmlFor="amount">Amount</Label>
-						<Input
-							id="amount"
-							type="number"
-							step="0.01"
-							placeholder="0.00"
-							value={amount}
-							onChange={(e) => setAmount(e.target.value)}
-						/>
-					</div>
-
-					<div className="space-y-2">
-						<Label htmlFor="category">Category</Label>
-						<Select value={category} onValueChange={setCategory}>
-							<SelectTrigger>
-								<SelectValue placeholder="Select category" />
-							</SelectTrigger>
-							<SelectContent>
-								{categories.map((cat) => (
-									<SelectItem key={cat.id} value={cat.name}>
-										{cat.name}
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
-					</div>
-
-					<Button type="submit" className="w-full">
-						Add Expense
-					</Button>
-				</form>
+				<TransactionForm />
 			</CardContent>
 		</Card>
 	);

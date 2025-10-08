@@ -10,8 +10,10 @@ const getTransactions = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const createTransaction = asyncHandler(async (req: Request, res: Response) => {
-	const data = req.body;
-	const transaction = await transactionService.createTransaction(data);
+	const data = { ...req.body, categoryId: req.body.category.id };
+	const user = req.user;
+	console.log(data);
+	const transaction = await transactionService.createTransaction(data, user.id);
 	res.status(201).json(new ApiResponse(201, "Transaction created", { transaction }));
 });
 

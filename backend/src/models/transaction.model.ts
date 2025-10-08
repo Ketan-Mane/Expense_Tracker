@@ -15,7 +15,7 @@ interface TransactionAttributes {
 	updatedAt?: Date;
 }
 
-export interface TransactionCreationAttributes extends Optional<TransactionAttributes, "id"> {}
+export interface TransactionCreationAttributes extends Optional<TransactionAttributes, "id" | "monthId"> {}
 
 class Transaction extends Model<TransactionAttributes, TransactionCreationAttributes> implements TransactionAttributes {
 	public id!: number;

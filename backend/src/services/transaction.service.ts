@@ -1,5 +1,8 @@
+import Month from "@models/month.model";
 import Transaction, { TransactionCreationAttributes } from "@models/transaction.model";
 import User from "@models/user.model";
+import dayjs from "dayjs";
+import { Op } from "sequelize";
 import PaginatedResult from "types/pagination";
 
 const getTransactions = async ({
@@ -21,8 +24,35 @@ const getTransactions = async ({
 	return { data: data, metadata };
 };
 
-const createTransaction = async (data: TransactionCreationAttributes): Promise<Transaction> => {
-	const transaction = await Transaction.create({ ...data });
+const createTransaction = async (data: TransactionCreationAttributes, userId: string): Promise<Transaction> => {
+	const startDate = dayjs(data.date).startOf("month");
+	const endDate = dayjs(data.date).endOf("month");
+	let month = await Month.findOne({
+		where: {
+			userId,
+			startDate: { [Op.lte]: data.date },
+			endDate: { [Op.gte]: data.date },
+		},
+	});
+	if (!month) {
+		const startDate = dayjs(data.date).startOf("month").toDate();
+		const endDate = dayjs(data.date).endOf("month").toDate();
+
+		month = await Month.create({
+			userId,
+			name: `${dayjs(data.date).format("MMMM YYYY")}`,
+			startDate,
+			endDate,
+			archived: false,
+		});
+	}
+
+	const transaction = await Transaction.create({
+		...data,
+		categoryId: data.categoryId,
+		monthId: month.id,
+		paymentMethod: "UPI",
+	});
 	return transaction;
 };
 

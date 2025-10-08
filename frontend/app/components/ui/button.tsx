@@ -55,8 +55,14 @@ function Button({
 			{...props}
 			disabled={isProcessing}
 		>
-			{children}
-			{isProcessing && <Loader2 className="animate-spin" />}
+			{asChild ? (
+				children
+			) : (
+				<>
+					{children}
+					{isProcessing && <Loader2 className="animate-spin" />}
+				</>
+			)}
 		</Comp>
 	);
 }

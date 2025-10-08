@@ -12,6 +12,7 @@ const useAuth = () => {
 	const { data: user } = useQuery({
 		queryKey: ["auth"],
 		queryFn: verifyAuth,
+		retry: false,
 	});
 
 	useEffect(() => {
