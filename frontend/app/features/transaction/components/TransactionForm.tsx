@@ -5,8 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "~/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
 import useCategories from "~/features/category/hooks/use-categories";
-import { useEffect, useState } from "react";
-import type { Category } from "~/features/category/types/category";
 import { Button } from "~/components/ui/button";
 import useCreateTransaction from "../hooks/use-create-transaction";
 import DatePicker from "~/components/ui/date-picker";
@@ -17,16 +15,10 @@ interface TransactionFormProps {
 }
 
 const TransactionForm = ({ transaction }: TransactionFormProps) => {
-	const [categories, setCategories] = useState<Category[]>([]);
-
 	const { data } = useCategories();
 	const { mutateAsync: createTransaction, isPending: isCreating } = useCreateTransaction();
 
-	useEffect(() => {
-		if (data?.data) {
-			setCategories(data?.data);
-		}
-	}, [data]);
+	const categories = data?.categories || [];
 
 	const schema = transaction ? TransactionSchema : TransactionSchema.omit({ id: true });
 	const form = useForm({
@@ -42,9 +34,12 @@ const TransactionForm = ({ transaction }: TransactionFormProps) => {
 		},
 	});
 
-	console.log("form", form.formState.errors);
 	const onSubmit = async (data: Transaction) => {
-		await createTransaction(data);
+		const payload = {
+			...data,
+			categoryId: data.category.id,
+		};
+		await createTransaction(payload);
 	};
 
 	return (

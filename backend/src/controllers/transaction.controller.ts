@@ -5,14 +5,13 @@ import { Request, Response } from "express";
 
 const getTransactions = asyncHandler(async (req: Request, res: Response) => {
 	const monthId = req.params?.id;
-	const { data: transactions, metadata } = await transactionService.getTransactions({});
-	res.status(200).json(new ApiResponse(200, "Success", { transactions, metadata }));
+	const transactions = await transactionService.getTransactions({});
+	res.status(200).json(new ApiResponse(200, "Success", transactions));
 });
 
 const createTransaction = asyncHandler(async (req: Request, res: Response) => {
-	const data = { ...req.body, categoryId: req.body.category.id };
+	let data = req.body;
 	const user = req.user;
-	console.log(data);
 	const transaction = await transactionService.createTransaction(data, user.id);
 	res.status(201).json(new ApiResponse(201, "Transaction created", { transaction }));
 });

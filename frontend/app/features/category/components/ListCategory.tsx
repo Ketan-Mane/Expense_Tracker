@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import type { Category } from "../types/category";
 import useCategories from "../hooks/use-categories";
 import useDeleteCategory from "../hooks/use-delete-category";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
@@ -11,15 +9,9 @@ import ConfirmModal from "~/components/common/confirm-modal";
 import { Badge } from "~/components/ui/badge";
 
 const ListCategory = () => {
-	const [categories, setCategories] = useState<Category[]>([]);
-	const { data } = useCategories();
 	const { mutateAsync: deleteCategory } = useDeleteCategory();
-
-	useEffect(() => {
-		if (data?.data) {
-			setCategories(data?.data);
-		}
-	}, [data]);
+	const { data } = useCategories();
+	const categories = data?.categories || [];
 
 	const handleDeleteCategory = async (categoryId: string) => {
 		await deleteCategory(categoryId);

@@ -8,6 +8,7 @@ export const TransactionSchema = z.object({
 	amount: z.int().nonnegative("Amount must be a positive number"),
 	date: z.date().optional(),
 	// month: z.uuidv4().optional(),
+	type: z.enum(["expense", "income"]),
 	paymentMethod: z.string().optional(),
 	isRecurring: z.boolean().optional(),
 	category: CategorySchema,

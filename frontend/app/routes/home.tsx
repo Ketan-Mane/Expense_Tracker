@@ -6,10 +6,10 @@ import { CategoryManager } from "~/features/category/components/CategoryManager"
 import { ExpenseOverview } from "~/components/ExpenseOverview";
 import Header from "~/components/header/header";
 import { Navigation } from "~/components/Navigation";
-import { RecentTransactions } from "~/components/RecentTransactions";
 import { SpendingChart } from "~/components/SpendingChart";
 import { TrendChart } from "~/components/TrendChart";
 import { Toaster } from "~/components/ui/sonner";
+import { RecentTransactions } from "~/features/transaction/components/RecentTransactions";
 
 export function meta({}: MetaArgs) {
 	return [

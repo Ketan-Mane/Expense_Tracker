@@ -27,14 +27,14 @@ const CategoryForm = ({ category, close }: CategoryFormProps) => {
 		},
 	});
 
-	console.log("id", form.getFieldState("id"));
-	console.log("userId", form.getFieldState("userId"));
-	console.log("name", form.getFieldState("name"));
-	console.log("color", form.getFieldState("color"));
-	console.log("isDefault", form.getFieldState("isDefault"));
-	console.log("icon", form.getFieldState("icon"));
-	console.log("createdAt", form.getFieldState("createdAt"));
-	console.log("updatedAt", form.getFieldState("updatedAt"));
+	// console.log("id", form.getFieldState("id"));
+	// console.log("userId", form.getFieldState("userId"));
+	// console.log("name", form.getFieldState("name"));
+	// console.log("color", form.getFieldState("color"));
+	// console.log("isDefault", form.getFieldState("isDefault"));
+	// console.log("icon", form.getFieldState("icon"));
+	// console.log("createdAt", form.getFieldState("createdAt"));
+	// console.log("updatedAt", form.getFieldState("updatedAt"));
 
 	const handleSubmit = async (data: Category) => {
 		if (category) {

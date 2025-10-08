@@ -1,6 +1,6 @@
 import Category, { CategoryAttributes, CategoryCreationAttributes } from "@models/category.model";
 import { Op } from "sequelize";
-import PaginatedResult from "types/pagination";
+import { type PaginatedResult } from "types/pagination";
 
 const getCategories = async ({
 	userId,
@@ -10,7 +10,7 @@ const getCategories = async ({
 	userId: string;
 	page?: number;
 	limit?: number;
-}): Promise<PaginatedResult<CategoryAttributes>> => {
+}): Promise<PaginatedResult<"categories", Category>> => {
 	const { rows, count } = await Category.findAndCountAll({
 		where: {
 			[Op.or]: [{ userId }, { isDefault: true }],
@@ -19,14 +19,14 @@ const getCategories = async ({
 		offset: (page - 1) * limit,
 	});
 	const metadata = { count: rows.length, page, limit, totalPages: Math.ceil(count / limit) };
-	return { data: rows, metadata };
+	return { categories: rows, metadata };
 };
 
 const createCategory = async (data: CategoryCreationAttributes) => {
 	return Category.create(data);
 };
 
-const updateCategory = async (data: { id: string; name: string; userId: string, color?: string }) => {
+const updateCategory = async (data: { id: string; name: string; userId: string; color?: string }) => {
 	const category = await Category.findOne({ where: { id: data.id, userId: data.userId } });
 	if (!category) {
 		throw new Error("Category not found");
