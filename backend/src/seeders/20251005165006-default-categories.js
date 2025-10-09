@@ -13,7 +13,7 @@ module.exports = {
 				isDefault: true,
 			},
 			{
-				id : UUIDV4(),
+				id: UUIDV4(),
 				name: "Shopping",
 				color: "#009689",
 				isDefault: true,
@@ -26,8 +26,14 @@ module.exports = {
 			},
 			{
 				id: UUIDV4(),
-				name: "Entertainment",
-				color: "#ffb900",
+				name: "Work",
+				color: "#fe9a00",
+				isDefault: true,
+			},
+			{
+				id: UUIDV4(),
+				name: "Personal",
+				color: "#8B5CF6",
 				isDefault: true,
 			},
 		]);

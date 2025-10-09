@@ -1,17 +1,17 @@
-import z from "zod";
-import { CategorySchema } from "~/features/category/types/category";
-import { zodDate } from "~/schemas/zodHelper";
+import z from 'zod';
+import { CategorySchema } from '~/features/category/types/category';
+import { PAYMENT_MODES } from '~/lib/constant';
+import { zodDate } from '~/schemas/zodHelper';
 
 export const TransactionSchema = z.object({
 	id: z.uuidv4().optional().nullable(),
-	item: z.string().nonempty("Description is required"),
-	amount: z.int().nonnegative("Amount must be a positive number"),
+	item: z.string().nonempty('Description is required'),
+	amount: z.int().nonnegative('Amount must be a positive number'),
 	date: z.date().optional(),
-	// month: z.uuidv4().optional(),
-	type: z.enum(["expense", "income"]),
-	paymentMethod: z.string().optional(),
+	type: z.enum(['Expense', 'Income']),
+	paymentMethod: z.enum(PAYMENT_MODES).optional(),
 	isRecurring: z.boolean().optional(),
-	category: CategorySchema,
+	category: CategorySchema.refine((val) => !val || !!val.id, { message: 'Please select a category' }),
 	createdAt: zodDate.optional().nullable(),
 	updatedAt: zodDate.optional().nullable(),
 });

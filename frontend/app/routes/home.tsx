@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { redirect, type MetaArgs } from "react-router";
-import { AddExpenseForm } from "~/components/AddExpenseForm";
+import { type MetaArgs } from "react-router";
 import { CategoryBreakdown } from "~/components/CategoryBreakdown";
 import { CategoryManager } from "~/features/category/components/CategoryManager";
 import { ExpenseOverview } from "~/components/ExpenseOverview";
@@ -10,6 +9,7 @@ import { SpendingChart } from "~/components/SpendingChart";
 import { TrendChart } from "~/components/TrendChart";
 import { Toaster } from "~/components/ui/sonner";
 import { RecentTransactions } from "~/features/transaction/components/RecentTransactions";
+import AddTransactionCard from "~/features/transaction/components/AddTransactionCard";
 
 export function meta({}: MetaArgs) {
 	return [
@@ -38,7 +38,7 @@ export default function Home() {
 					<RecentTransactions />
 				</div>
 				<div className="space-y-6">
-					<AddExpenseForm />
+					<AddTransactionCard />
 					<CategoryBreakdown />
 				</div>
 			</div>

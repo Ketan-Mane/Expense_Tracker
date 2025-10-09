@@ -8,6 +8,11 @@ export const login = async (payload: LoginForm) => {
 	return data;
 };
 
+export const logout = async () => {
+	const { data } = await axiosInstance.post("/auth/logout");
+	return data;
+};
+
 export const signup = async (payload: SignupForm) => {
 	const { data } = await axiosInstance.post<SignupResponse>("/auth/signup", payload);
 	return data;

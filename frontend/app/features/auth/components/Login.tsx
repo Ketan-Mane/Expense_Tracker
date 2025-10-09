@@ -13,7 +13,7 @@ export function loader() {
 }
 
 export default function Login() {
-	const mutation = useLogin();
+	const { mutateAsync: login, isPending } = useLogin();
 
 	const form = useForm({
 		resolver: zodResolver(LoginSchema),
@@ -25,7 +25,7 @@ export default function Login() {
 	});
 
 	const handleSubmit = async (data: LoginForm) => {
-		await mutation.mutateAsync(data);
+		await login(data);
 	};
 
 	return (
@@ -77,7 +77,7 @@ export default function Login() {
 							/>
 
 							<div className="flex-col gap-2">
-								<Button type="submit" className="w-full">
+								<Button type="submit" className="w-full" isProcessing={isPending}>
 									Login
 								</Button>
 							</div>

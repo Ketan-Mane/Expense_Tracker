@@ -1,8 +1,8 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { PlusCircle } from "lucide-react";
-import TransactionForm from "~/features/transaction/components/TransactionForm";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
+import TransactionForm from "./TransactionForm";
 
-export function AddExpenseForm() {
+const AddTransactionCard = () => {
 	return (
 		<Card>
 			<CardHeader>
@@ -17,4 +17,5 @@ export function AddExpenseForm() {
 			</CardContent>
 		</Card>
 	);
-}
+};
+export default AddTransactionCard;

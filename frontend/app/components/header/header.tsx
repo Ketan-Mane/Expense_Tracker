@@ -1,5 +1,6 @@
 import { Button } from "../ui/button";
-import { Calendar, Download, Settings } from "lucide-react";
+import { Calendar, Settings } from "lucide-react";
+import LogoutButton from "~/features/auth/components/Logout";
 
 const Header = () => {
 	return (
@@ -15,14 +16,15 @@ const Header = () => {
 							<Calendar className="h-4 w-4 mr-2" />
 							This Month
 						</Button>
-						<Button variant="outline" size="sm">
+						{/* <Button variant="outline" size="sm">
 							<Download className="h-4 w-4 mr-2" />
 							Export
-						</Button>
+						</Button> */}
 						<Button variant="outline" size="sm">
 							<Settings className="h-4 w-4 mr-2" />
 							Settings
 						</Button>
+						<LogoutButton />
 					</div>
 				</div>
 			</div>

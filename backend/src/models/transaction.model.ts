@@ -1,6 +1,5 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "@config/db";
-import User from "./user.model";
 
 interface TransactionAttributes {
 	id: number;
@@ -11,6 +10,7 @@ interface TransactionAttributes {
 	date?: Date;
 	paymentMethod?: string;
 	isRecurring?: boolean;
+	type?: string;
 	createdAt?: Date;
 	updatedAt?: Date;
 }
@@ -26,6 +26,7 @@ class Transaction extends Model<TransactionAttributes, TransactionCreationAttrib
 	public date?: Date;
 	public paymentMethod?: string;
 	public isRecurring?: boolean;
+	public type?: string;
 
 	public readonly createdAt?: Date;
 	public readonly updatedAt?: Date;
@@ -73,6 +74,11 @@ Transaction.init(
 			type: DataTypes.BOOLEAN,
 			allowNull: true,
 			defaultValue: false,
+		},
+		type: {
+			type: DataTypes.ENUM("Expense", "Income"),
+			allowNull: true,
+			defaultValue: "Expense",
 		},
 	},
 	{

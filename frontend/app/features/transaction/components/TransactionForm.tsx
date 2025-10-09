@@ -1,13 +1,17 @@
-import { useForm } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "~/components/ui/form";
-import { TransactionSchema, type Transaction } from "../types/transaction";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "~/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
-import useCategories from "~/features/category/hooks/use-categories";
-import { Button } from "~/components/ui/button";
-import useCreateTransaction from "../hooks/use-create-transaction";
-import DatePicker from "~/components/ui/date-picker";
+import { useForm } from 'react-hook-form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form';
+import { TransactionSchema, type Transaction } from '../types/transaction';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Input } from '~/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
+import useCategories from '~/features/category/hooks/use-categories';
+import { Button } from '~/components/ui/button';
+import useCreateTransaction from '../hooks/use-create-transaction';
+import DatePicker from '~/components/ui/date-picker';
+import Modal from '~/components/common/modal';
+import { Plus } from 'lucide-react';
+import CategoryForm from '~/features/category/components/CategoryForm';
+import { PAYMENT_MODES, TRANSACTION_TYPES } from '~/lib/constant';
 
 interface TransactionFormProps {
 	transaction?: Transaction;
@@ -26,11 +30,15 @@ const TransactionForm = ({ transaction }: TransactionFormProps) => {
 		defaultValues: {
 			...(transaction && { id: transaction?.id }),
 			amount: transaction?.amount || 0,
-			item: transaction?.item || "",
+			item: transaction?.item || '',
 			date: transaction?.date || new Date(),
-			paymentMethod: transaction?.paymentMethod || "",
+			paymentMethod: transaction?.paymentMethod || 'UPI',
 			isRecurring: transaction?.isRecurring || false,
-			category: transaction?.category || {},
+			type: transaction?.type || 'Expense',
+			category: transaction?.category || {
+				id: '',
+				name: '',
+			},
 		},
 	});
 
@@ -41,6 +49,8 @@ const TransactionForm = ({ transaction }: TransactionFormProps) => {
 		};
 		await createTransaction(payload);
 	};
+
+	console.log(form.formState.errors);
 
 	return (
 		<Form {...form}>
@@ -105,6 +115,23 @@ const TransactionForm = ({ transaction }: TransactionFormProps) => {
 									</SelectContent>
 								</Select>
 							</FormControl>
+							<FormDescription className="text-xs text-end">
+								Not found?{'  '}
+								<Modal
+									title="Add New Category"
+									button={
+										<Button
+											type="button"
+											variant="link"
+											size="sm"
+											className="text-xs h-max w-max p-0"
+										>
+											Add New
+										</Button>
+									}
+									render={(close) => <CategoryForm close={close} />}
+								/>
+							</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}
@@ -118,6 +145,58 @@ const TransactionForm = ({ transaction }: TransactionFormProps) => {
 							<FormLabel>Date</FormLabel>
 							<FormControl>
 								<DatePicker value={field.value} onChange={field.onChange} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
+				<FormField
+					name="paymentMethod"
+					control={form.control}
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Type</FormLabel>
+							<FormControl>
+								<Select name={field.name} value={field.value} onValueChange={field.onChange}>
+									<SelectTrigger className="w-full">
+										<SelectValue placeholder="Select a Payment Method" />
+									</SelectTrigger>
+
+									<SelectContent>
+										{PAYMENT_MODES.map((payment) => (
+											<SelectItem key={payment} value={payment}>
+												{payment}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
+				<FormField
+					name="type"
+					control={form.control}
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Type</FormLabel>
+							<FormControl>
+								<Select name={field.name} value={field.value} onValueChange={field.onChange}>
+									<SelectTrigger className="w-full">
+										<SelectValue placeholder="Select a type" />
+									</SelectTrigger>
+
+									<SelectContent>
+										{TRANSACTION_TYPES.map((expense) => (
+											<SelectItem key={expense} value={expense}>
+												{expense}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
 							</FormControl>
 							<FormMessage />
 						</FormItem>

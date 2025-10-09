@@ -1,10 +1,10 @@
-import { MoreHorizontal } from "lucide-react";
-import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
-import useTransactions from "../hooks/use-transactions";
-import { formatCurrency } from "~/lib/utils";
-import { formatDate } from "date-fns";
+import { MoreHorizontal } from 'lucide-react';
+import { Badge } from '~/components/ui/badge';
+import { Button } from '~/components/ui/button';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table';
+import useTransactions from '../hooks/use-transactions';
+import { formatCurrency } from '~/lib/utils';
+import { formatDate } from 'date-fns';
 
 const ListTransactions = () => {
 	const { data } = useTransactions();
@@ -31,15 +31,15 @@ const ListTransactions = () => {
 							</Badge>
 						</TableCell>
 						<TableCell className="text-muted-foreground">
-							{formatDate(transaction.date!, "dd/MM/yyyy")}
+							{formatDate(transaction.date!, 'dd/MM/yyyy')}
 						</TableCell>
 						<TableCell
 							className={`text-right font-medium ${
-								transaction.type === "income" ? "text-green-600" : "text-red-600"
+								transaction.type === 'Income' ? 'text-green-600' : 'text-red-600'
 							}`}
 						>
-							{transaction.type === "income" ? "+" : "-"}
-							{formatCurrency(transaction.amount, "INR")}
+							{transaction.type === 'Income' ? '+' : '-'}
+							{formatCurrency(transaction.amount, 'INR')}
 						</TableCell>
 						<TableCell>
 							<Button variant="ghost" size="sm">
