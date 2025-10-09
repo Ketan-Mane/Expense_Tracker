@@ -8,6 +8,24 @@ module.exports = {
 		await queryInterface.bulkInsert("Categories", [
 			{
 				id: UUIDV4(),
+				name: "Food & Dining",
+				color: "#6366F1",
+				isDefault: true,
+			},
+			{
+				id: UUIDV4(),
+				name: "Entertainment",
+				color: "#3B82F6",
+				isDefault: true,
+			},
+			{
+				id: UUIDV4(),
+				name: "Bills & Utilities",
+				color: "#EC4899",
+				isDefault: true,
+			},
+			{
+				id: UUIDV4(),
 				name: "Transportation",
 				color: "#f54a00",
 				isDefault: true,

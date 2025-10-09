@@ -9,18 +9,19 @@ import { Button } from '~/components/ui/button';
 import useCreateTransaction from '../hooks/use-create-transaction';
 import DatePicker from '~/components/ui/date-picker';
 import Modal from '~/components/common/modal';
-import { Plus } from 'lucide-react';
 import CategoryForm from '~/features/category/components/CategoryForm';
 import { PAYMENT_MODES, TRANSACTION_TYPES } from '~/lib/constant';
+import useUpdateTransaction from '../hooks/use-update-transaction';
 
 interface TransactionFormProps {
 	transaction?: Transaction;
 	close?: () => void;
 }
 
-const TransactionForm = ({ transaction }: TransactionFormProps) => {
+const TransactionForm = ({ transaction, close }: TransactionFormProps) => {
 	const { data } = useCategories();
 	const { mutateAsync: createTransaction, isPending: isCreating } = useCreateTransaction();
+	const { mutateAsync: updateTransaction, isPending: isUpdating } = useUpdateTransaction();
 
 	const categories = data?.categories || [];
 
@@ -31,7 +32,7 @@ const TransactionForm = ({ transaction }: TransactionFormProps) => {
 			...(transaction && { id: transaction?.id }),
 			amount: transaction?.amount || 0,
 			item: transaction?.item || '',
-			date: transaction?.date || new Date(),
+			date: new Date(transaction?.date || new Date()),
 			paymentMethod: transaction?.paymentMethod || 'UPI',
 			isRecurring: transaction?.isRecurring || false,
 			type: transaction?.type || 'Expense',
@@ -47,10 +48,22 @@ const TransactionForm = ({ transaction }: TransactionFormProps) => {
 			...data,
 			categoryId: data.category.id,
 		};
-		await createTransaction(payload);
-	};
+		if (transaction) {
+			await updateTransaction(data, {
+				onSuccess: () => {
+					if (close) close();
+				},
+			});
+			return;
+		}
 
-	console.log(form.formState.errors);
+		await createTransaction(payload, {
+			onSuccess: () => {
+				form.reset();
+				if (close) close();
+			},
+		});
+	};
 
 	return (
 		<Form {...form}>
@@ -203,8 +216,8 @@ const TransactionForm = ({ transaction }: TransactionFormProps) => {
 					)}
 				/>
 
-				<Button type="submit" isProcessing={isCreating}>
-					Submit
+				<Button type="submit" isProcessing={isCreating || isUpdating}>
+					{transaction ? 'Update' : 'Create'}
 				</Button>
 			</form>
 		</Form>

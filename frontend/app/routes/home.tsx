@@ -1,25 +1,25 @@
-import { useState } from "react";
-import { type MetaArgs } from "react-router";
-import { CategoryBreakdown } from "~/components/CategoryBreakdown";
-import { CategoryManager } from "~/features/category/components/CategoryManager";
-import { ExpenseOverview } from "~/components/ExpenseOverview";
-import Header from "~/components/header/header";
-import { Navigation } from "~/components/Navigation";
-import { SpendingChart } from "~/components/SpendingChart";
-import { TrendChart } from "~/components/TrendChart";
-import { Toaster } from "~/components/ui/sonner";
-import { RecentTransactions } from "~/features/transaction/components/RecentTransactions";
-import AddTransactionCard from "~/features/transaction/components/AddTransactionCard";
+import { useState } from 'react';
+import { type MetaArgs } from 'react-router';
+import { CategoryBreakdown } from '~/components/CategoryBreakdown';
+import { CategoryManager } from '~/features/category/components/CategoryManager';
+import { ExpenseOverview } from '~/components/ExpenseOverview';
+import Header from '~/components/header/header';
+import { Navigation } from '~/components/Navigation';
+import { SpendingChart } from '~/components/SpendingChart';
+import { TrendChart } from '~/components/TrendChart';
+import { Toaster } from '~/components/ui/sonner';
+import { RecentTransactions } from '~/features/transaction/components/RecentTransactions';
+import AddTransactionCard from '~/features/transaction/components/AddTransactionCard';
 
 export function meta({}: MetaArgs) {
 	return [
-		{ title: "Home - Expense Tracker" },
-		{ name: "description", content: "Welcome to React Router! Hello React" },
+		{ title: 'Home - Expense Tracker' },
+		{ name: 'description', content: 'Welcome to React Router! Hello React' },
 	];
 }
 
 export default function Home() {
-	const [activeTab, setActiveTab] = useState("dashboard");
+	const [activeTab, setActiveTab] = useState('dashboard');
 
 	const renderDashboard = () => (
 		<div className="space-y-8">
@@ -74,9 +74,9 @@ export default function Home() {
 
 				{/* Main Content */}
 				<main className="container mx-auto px-4 pb-8">
-					{activeTab === "dashboard" && renderDashboard()}
-					{activeTab === "categories" && renderCategories()}
-					{activeTab === "analytics" && renderAnalytics()}
+					{activeTab === 'dashboard' && renderDashboard()}
+					{activeTab === 'categories' && renderCategories()}
+					{activeTab === 'analytics' && renderAnalytics()}
 				</main>
 			</div>
 		</>
