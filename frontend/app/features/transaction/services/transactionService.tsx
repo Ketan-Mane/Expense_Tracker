@@ -24,3 +24,8 @@ export const deleteTransaction = async (id: string) => {
 	const { data } = await axiosInstance.delete<ApiResponse<{ data: Transaction }>>(`/transactions/${id}`);
 	return data;
 };
+
+export const getChartData = async () => {
+	const { data } = await axiosInstance.get('/transactions/analytics/chart');
+	return data.data;
+};

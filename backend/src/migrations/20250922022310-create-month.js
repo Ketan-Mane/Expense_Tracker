@@ -20,7 +20,6 @@ module.exports = {
 			name: { type: DataTypes.STRING, allowNull: false },
 			startDate: { type: DataTypes.DATEONLY, allowNull: false },
 			endDate: { type: DataTypes.DATEONLY, allowNull: false },
-			archived: { type: DataTypes.BOOLEAN, defaultValue: false },
 			createdAt: { type: DataTypes.DATE, defaultValue: Sequelize.NOW },
 			updatedAt: { type: DataTypes.DATE, defaultValue: Sequelize.NOW },
 		});

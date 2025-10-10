@@ -1,25 +1,41 @@
 import Category from "@models/category.model";
 import Month from "@models/month.model";
 import Transaction, { TransactionCreationAttributes } from "@models/transaction.model";
-import User from "@models/user.model";
 import dayjs from "dayjs";
-import { Op } from "sequelize";
+import { col, fn, Op } from "sequelize";
 import { type PaginatedResult } from "types/pagination";
 
 const getTransactions = async ({
 	monthId = null,
 	page = 1,
 	limit = 10,
+	isArchived = false,
+	userId,
 }: {
 	monthId?: string | null;
 	page?: number;
 	limit?: number;
+	isArchived?: boolean;
+	userId: string;
 }): Promise<PaginatedResult<"transactions", Transaction>> => {
 	const { count, rows } = await Transaction.findAndCountAll({
-		...(monthId ? { where: { monthId } } : {}),
+		where: {
+			...(monthId && { monthId }),
+			isArchived,
+		},
 		limit,
 		attributes: { exclude: ["categoryId"] },
-		include: [{ model: Category, as: "category", attributes: ["id", "name", "color"] }],
+		include: [
+			{ model: Category, as: "category", attributes: ["id", "name", "color"] },
+			{
+				model: Month,
+				as: "months",
+				attributes: ["id", "name"],
+				where: {
+					userId,
+				},
+			},
+		],
 		offset: (page - 1) * limit,
 	});
 
@@ -44,7 +60,6 @@ const createTransaction = async (data: TransactionCreationAttributes, userId: st
 			name: `${dayjs(data.date).format("MMMM YYYY")}`,
 			startDate,
 			endDate,
-			archived: false,
 		});
 	}
 
@@ -74,4 +89,31 @@ const deleteTransaction = async (id: string): Promise<void> => {
 	await transaction.destroy();
 };
 
-export default { getTransactions, createTransaction, updateTransaction, deleteTransaction };
+const getAnalyticsChart = async () => {
+	const month = await Month.findOne({
+		where: {
+			startDate: { [Op.lte]: new Date() },
+			endDate: { [Op.gte]: new Date() },
+		},
+	});
+
+	const data = await Transaction.findAll({
+		attributes: ["categoryId", [fn("SUM", col("amount")), "totalSpent"]],
+		include: [{ model: Category, as: "category", required: false, attributes: ["name", "color"] }],
+		where: { type: "Expense", monthId: month?.id, categoryId: { [Op.ne]: null } as any },
+		group: ["categoryId", "category.id", "category.name", "category.color"],
+		raw: true,
+	});
+
+	const formattedData: { name: string; fill: string; value: number }[] = data.map((item: any) => {
+		return {
+			name: item?.["category.name"] || "",
+			fill: item?.["category.color"],
+			value: item.totalSpent,
+		};
+	});
+
+	return formattedData;
+};
+
+export default { getTransactions, createTransaction, updateTransaction, deleteTransaction, getAnalyticsChart };

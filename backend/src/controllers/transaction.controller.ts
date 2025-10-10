@@ -5,7 +5,8 @@ import { Request, Response } from "express";
 
 const getTransactions = asyncHandler(async (req: Request, res: Response) => {
 	const monthId = req.params?.id;
-	const transactions = await transactionService.getTransactions({});
+	const user = req.user;
+	const transactions = await transactionService.getTransactions({ userId: user.id });
 	res.status(200).json(new ApiResponse(200, "Success", transactions));
 });
 
@@ -29,4 +30,9 @@ const deleteTransaction = asyncHandler(async (req: Request, res: Response) => {
 	res.status(200).json(new ApiResponse(200, "Transaction deleted"));
 });
 
-export default { getTransactions, createTransaction, updateTransaction, deleteTransaction };
+const getAnalyticsChartData = asyncHandler(async (req: Request, res: Response) => {
+	const analytics = await transactionService.getAnalyticsChart();
+	res.status(200).json(new ApiResponse(200, "Success", analytics));
+});
+
+export default { getTransactions, createTransaction, updateTransaction, deleteTransaction, getAnalyticsChartData };

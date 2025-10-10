@@ -49,7 +49,7 @@ const TransactionForm = ({ transaction, close }: TransactionFormProps) => {
 			categoryId: data.category.id,
 		};
 		if (transaction) {
-			await updateTransaction(data, {
+			await updateTransaction(payload, {
 				onSuccess: () => {
 					if (close) close();
 				},

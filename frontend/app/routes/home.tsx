@@ -5,7 +5,7 @@ import { CategoryManager } from '~/features/category/components/CategoryManager'
 import { ExpenseOverview } from '~/components/ExpenseOverview';
 import Header from '~/components/header/header';
 import { Navigation } from '~/components/Navigation';
-import { SpendingChart } from '~/components/SpendingChart';
+import { SpendingChart } from '~/features/transaction/components/SpendingChart';
 import { TrendChart } from '~/components/TrendChart';
 import { Toaster } from '~/components/ui/sonner';
 import { RecentTransactions } from '~/features/transaction/components/RecentTransactions';
@@ -24,12 +24,12 @@ export default function Home() {
 	const renderDashboard = () => (
 		<div className="space-y-8">
 			{/* Overview Cards */}
-			<ExpenseOverview />
+			{/* <ExpenseOverview /> */}
 
 			{/* Charts Section */}
 			<div className="grid gap-6 lg:grid-cols-2">
 				<SpendingChart />
-				<TrendChart />
+				{/* <TrendChart /> */}
 			</div>
 
 			{/* Bottom Section */}

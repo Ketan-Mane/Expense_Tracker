@@ -9,6 +9,8 @@ import Modal from '~/components/common/modal';
 import TransactionForm from './TransactionForm';
 import ConfirmModal from '~/components/common/confirm-modal';
 import useDeleteTransaction from '../hooks/use-delete-transaction';
+import useUpdateTransaction from '../hooks/use-update-transaction';
+import type { Transaction } from '../types/transaction';
 
 const ListTransactions = () => {
 	const { data } = useTransactions();
@@ -16,8 +18,14 @@ const ListTransactions = () => {
 
 	const { mutateAsync: deleteTransaction } = useDeleteTransaction();
 
+	const { mutateAsync: updateTransaction } = useUpdateTransaction();
+
 	const handleDelete = async (id: string) => {
 		await deleteTransaction(id);
+	};
+
+	const handelArchive = async (transaction: Transaction) => {
+		await updateTransaction({ ...transaction, isArchived: true });
 	};
 
 	return (
@@ -69,7 +77,7 @@ const ListTransactions = () => {
 									render={(close) => <TransactionForm transaction={transaction} close={close} />}
 								/>
 
-								<Button variant="ghost" size="sm">
+								<Button variant="ghost" size="sm" onClick={() => handelArchive(transaction)}>
 									<Archive />
 								</Button>
 								<ConfirmModal

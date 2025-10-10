@@ -10,6 +10,7 @@ interface TransactionAttributes {
 	date?: Date;
 	paymentMethod?: string;
 	isRecurring?: boolean;
+	isArchived?: boolean;
 	type?: string;
 	createdAt?: Date;
 	updatedAt?: Date;
@@ -26,6 +27,7 @@ class Transaction extends Model<TransactionAttributes, TransactionCreationAttrib
 	public date?: Date;
 	public paymentMethod?: string;
 	public isRecurring?: boolean;
+	public isArchived?: boolean;
 	public type?: string;
 
 	public readonly createdAt?: Date;
@@ -71,6 +73,11 @@ Transaction.init(
 			allowNull: true,
 		},
 		isRecurring: {
+			type: DataTypes.BOOLEAN,
+			allowNull: true,
+			defaultValue: false,
+		},
+		isArchived: {
 			type: DataTypes.BOOLEAN,
 			allowNull: true,
 			defaultValue: false,

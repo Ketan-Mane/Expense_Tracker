@@ -9,7 +9,6 @@ interface MonthAttributes {
 	name: string;
 	startDate: Date;
 	endDate: Date;
-	archived: boolean;
 	createdAt?: Date;
 	updatedAt?: Date;
 }
@@ -22,7 +21,6 @@ class Month extends Model<MonthAttributes, MonthCreationAttributes> implements M
 	public name!: string;
 	public startDate!: Date;
 	public endDate!: Date;
-	public archived!: boolean;
 	public readonly createdAt!: Date;
 	public readonly updatedAt!: Date;
 }
@@ -34,7 +32,6 @@ Month.init(
 		name: { type: DataTypes.STRING, allowNull: false },
 		startDate: { type: DataTypes.DATE, allowNull: false },
 		endDate: { type: DataTypes.DATE, allowNull: false },
-		archived: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
 	},
 	{
 		sequelize,
