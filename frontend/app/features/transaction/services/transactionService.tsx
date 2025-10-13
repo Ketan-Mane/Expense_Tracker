@@ -25,7 +25,12 @@ export const deleteTransaction = async (id: string) => {
 	return data;
 };
 
-export const getChartData = async () => {
-	const { data } = await axiosInstance.get('/transactions/analytics/chart');
+export const getCategoryAnalytics = async () => {
+	const { data } = await axiosInstance.get('/transactions/analytics/category');
+	return data.data;
+};
+
+export const getMonthlyAnalytics = async () => {
+	const { data } = await axiosInstance.get('/transactions/analytics/monthly');
 	return data.data;
 };

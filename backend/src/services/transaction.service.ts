@@ -2,8 +2,11 @@ import Category from "@models/category.model";
 import Month from "@models/month.model";
 import Transaction, { TransactionCreationAttributes } from "@models/transaction.model";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { col, fn, Op } from "sequelize";
 import { type PaginatedResult } from "types/pagination";
+
+dayjs.extend(utc);
 
 const getTransactions = async ({
 	monthId = null,
@@ -89,7 +92,7 @@ const deleteTransaction = async (id: string): Promise<void> => {
 	await transaction.destroy();
 };
 
-const getAnalyticsChart = async () => {
+const getCategoryAnalytics = async () => {
 	const month = await Month.findOne({
 		where: {
 			startDate: { [Op.lte]: new Date() },
@@ -116,4 +119,46 @@ const getAnalyticsChart = async () => {
 	return formattedData;
 };
 
-export default { getTransactions, createTransaction, updateTransaction, deleteTransaction, getAnalyticsChart };
+export const getMonthlyAnalytics = async (userId: string) => {
+	const startDate = dayjs().utc(true).startOf("year").toDate();
+	const endDate = dayjs().utc(true).endOf("month").toDate();
+
+	const month = await Month.findAll({
+		attributes: ["id"],
+		where: {
+			userId,
+			startDate: { [Op.gte]: startDate },
+			endDate: { [Op.lte]: endDate },
+		},
+		raw: true,
+	});
+
+	const rawData = await Transaction.findAll({
+		attributes: ["monthId", [fn("SUM", col("amount")), "amount"]],
+		where: {
+			type: "Expense",
+			monthId: {
+				[Op.in]: month.map((item) => item.id),
+			},
+		},
+		include: [{ model: Month, as: "months", required: false, attributes: ["id", "name"] }],
+		group: ["monthId", "months.id"],
+		raw: true,
+	});
+
+	const data = rawData?.map((item: any) => ({
+		Month: item["months.name"],
+		Expenses: item.amount,
+		id: item.monthId,
+	}));
+	return data;
+};
+
+export default {
+	getTransactions,
+	createTransaction,
+	updateTransaction,
+	deleteTransaction,
+	getCategoryAnalytics,
+	getMonthlyAnalytics,
+};

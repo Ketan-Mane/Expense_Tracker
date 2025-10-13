@@ -30,9 +30,22 @@ const deleteTransaction = asyncHandler(async (req: Request, res: Response) => {
 	res.status(200).json(new ApiResponse(200, "Transaction deleted"));
 });
 
-const getAnalyticsChartData = asyncHandler(async (req: Request, res: Response) => {
-	const analytics = await transactionService.getAnalyticsChart();
+const getCategoryAnalytics = asyncHandler(async (req: Request, res: Response) => {
+	const analytics = await transactionService.getCategoryAnalytics();
 	res.status(200).json(new ApiResponse(200, "Success", analytics));
 });
 
-export default { getTransactions, createTransaction, updateTransaction, deleteTransaction, getAnalyticsChartData };
+const getMonthlyAnalytics = asyncHandler(async (req: Request, res: Response) => {
+	const userId = req.user.id;
+	const analytics = await transactionService.getMonthlyAnalytics(userId);
+	res.status(200).json(new ApiResponse(200, "Success", analytics));
+});
+
+export default {
+	getTransactions,
+	createTransaction,
+	updateTransaction,
+	deleteTransaction,
+	getCategoryAnalytics,
+	getMonthlyAnalytics,
+};

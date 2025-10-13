@@ -6,7 +6,7 @@ import { ExpenseOverview } from '~/components/ExpenseOverview';
 import Header from '~/components/header/header';
 import { Navigation } from '~/components/Navigation';
 import { SpendingChart } from '~/features/transaction/components/SpendingChart';
-import { TrendChart } from '~/components/TrendChart';
+import { TrendChart } from '~/features/transaction/components/TrendChart';
 import { Toaster } from '~/components/ui/sonner';
 import { RecentTransactions } from '~/features/transaction/components/RecentTransactions';
 import AddTransactionCard from '~/features/transaction/components/AddTransactionCard';
@@ -57,7 +57,7 @@ export default function Home() {
 				<SpendingChart />
 				<TrendChart />
 			</div>
-			<CategoryBreakdown />
+			{/* <CategoryBreakdown /> */}
 		</div>
 	);
 
