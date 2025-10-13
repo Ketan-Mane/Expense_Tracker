@@ -7,7 +7,7 @@ const getBudgets = asyncHandler(async (req: Request, res: Response) => {
 	const userId = req.user?.id;
 	const page = parseInt(req.query.page as string) || 1;
 	const limit = parseInt(req.query.limit as string) || 10;
-	const { data: budgets, metadata } = await budgetService.getBudgetsByUserId({
+	const { budgets, metadata } = await budgetService.getBudgetsByUserId({
 		userId: userId as string,
 		page,
 		limit,

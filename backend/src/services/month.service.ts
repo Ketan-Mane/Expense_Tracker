@@ -1,6 +1,6 @@
 import ApiError from "@helper/ApiError";
 import Month, { MonthAttributes, MonthCreationAttributes } from "@models/month.model";
-import PaginatedResult from "types/pagination";
+import { type PaginatedResult } from "types/pagination";
 
 const getMonths = async ({
 	userId,
@@ -10,7 +10,7 @@ const getMonths = async ({
 	userId: string;
 	page?: number;
 	limit?: number;
-}): Promise<PaginatedResult<MonthAttributes>> => {
+}): Promise<PaginatedResult<"months", MonthAttributes>> => {
 	try {
 		const { count, rows: months } = await Month.findAndCountAll({
 			where: { userId },
@@ -19,7 +19,7 @@ const getMonths = async ({
 			// order: [["createdAt", "DESC"]],
 		});
 		const metadata = { count: months.length, page: 1, limit: count, totalPages: Math.ceil(count / 10) };
-		return { data: months, metadata };
+		return { months, metadata };
 	} catch (error: any) {
 		throw new ApiError(error?.message || "Failed to fetch months", 500);
 	}
@@ -70,30 +70,30 @@ const deleteMonth = async (id: string): Promise<void> => {
 	}
 };
 
-const archiveMonth = async (id: string): Promise<MonthAttributes> => {
-	try {
-		const month = await Month.findByPk(id);
-		if (!month) {
-			throw new Error("Month not found");
-		}
-		await month.update({ archived: true });
-		return month;
-	} catch (error) {
-		throw new ApiError("Failed to archive month", 500);
-	}
-};
+// const archiveMonth = async (id: string): Promise<MonthAttributes> => {
+// 	try {
+// 		const month = await Month.findByPk(id);
+// 		if (!month) {
+// 			throw new Error("Month not found");
+// 		}
+// 		await month.update({});
+// 		return month;
+// 	} catch (error) {
+// 		throw new ApiError("Failed to archive month", 500);
+// 	}
+// };
 
-const unarchiveMonth = async (id: string): Promise<MonthAttributes> => {
-	try {
-		const month = await Month.findByPk(id);
-		if (!month) {
-			throw new Error("Month not found");
-		}
-		await month.update({ archived: false });
-		return month;
-	} catch (error) {
-		throw new ApiError("Failed to unarchive month", 500);
-	}
-};
+// const unarchiveMonth = async (id: string): Promise<MonthAttributes> => {
+// 	try {
+// 		const month = await Month.findByPk(id);
+// 		if (!month) {
+// 			throw new Error("Month not found");
+// 		}
+// 		await month.update({ archived: false });
+// 		return month;
+// 	} catch (error) {
+// 		throw new ApiError("Failed to unarchive month", 500);
+// 	}
+// };
 
-export default { getMonths, getMonth, createMonth, updateMonth, deleteMonth, archiveMonth, unarchiveMonth };
+export default { getMonths, getMonth, createMonth, updateMonth, deleteMonth };

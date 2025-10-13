@@ -1,5 +1,5 @@
 import Budget, { BudgetAttributes, BudgetCreationAttributes } from "@models/budget.model";
-import PaginatedResult from "types/pagination";
+import { PaginatedResult } from "types/pagination";
 
 const getBudgetsByUserId = async ({
 	userId,
@@ -9,10 +9,10 @@ const getBudgetsByUserId = async ({
 	userId: string;
 	page?: number;
 	limit?: number;
-}): Promise<PaginatedResult<BudgetAttributes>> => {
+}): Promise<PaginatedResult<"budgets", BudgetAttributes>> => {
 	const { rows, count } = await Budget.findAndCountAll({ where: { userId } });
 	const metadata = { count: rows.length, page, limit, totalPages: Math.ceil(count / limit) };
-	return { data: rows, metadata };
+	return { budgets: rows, metadata };
 };
 
 const createBudget = async (budgetData: BudgetCreationAttributes): Promise<BudgetAttributes> => {

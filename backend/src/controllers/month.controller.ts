@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 
 const getMonths = asyncHandler(async (req: Request, res: Response) => {
 	const userId = req.user?.id;
-	const { data: months, metadata } = await monthService.getMonths({ userId: userId as string });
+	const { months, metadata } = await monthService.getMonths({ userId: userId as string });
 	res.status(200).json(new ApiResponse(200, "Success", { months, metadata }));
 });
 
@@ -35,16 +35,16 @@ const deleteMonth = asyncHandler(async (req: Request, res: Response) => {
 	res.status(204).send();
 });
 
-const archiveMonth = asyncHandler(async (req: Request, res: Response) => {
-	const { id } = req.params;
-	const month = await monthService.archiveMonth(id);
-	res.status(200).json(new ApiResponse(200, "Month archived", { month }));
-});
+// const archiveMonth = asyncHandler(async (req: Request, res: Response) => {
+// 	const { id } = req.params;
+// 	const month = await monthService.archiveMonth(id);
+// 	res.status(200).json(new ApiResponse(200, "Month archived", { month }));
+// });
 
-const unarchiveMonth = asyncHandler(async (req: Request, res: Response) => {
-	const { id } = req.params;
-	const month = await monthService.unarchiveMonth(id);
-	res.status(200).json(new ApiResponse(200, "Month unarchived", { month }));
-});
+// const unarchiveMonth = asyncHandler(async (req: Request, res: Response) => {
+// 	const { id } = req.params;
+// 	const month = await monthService.unarchiveMonth(id);
+// 	res.status(200).json(new ApiResponse(200, "Month unarchived", { month }));
+// });
 
-export default { getMonths, getMonth, createMonth, updateMonth, deleteMonth, archiveMonth, unarchiveMonth };
+export default { getMonths, getMonth, createMonth, updateMonth, deleteMonth };
