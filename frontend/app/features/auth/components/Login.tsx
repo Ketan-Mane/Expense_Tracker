@@ -85,7 +85,14 @@ export default function Login() {
 								<Button
 									type="button"
 									variant="outline"
-									onClick={() => loginWithRedirect()}
+									onClick={() =>
+										loginWithRedirect({
+											authorizationParams: {
+												connection: 'google-oauth2',
+												prompt: 'consent',
+											},
+										})
+									}
 									className="w-full flex items-center justify-center"
 								>
 									<svg
