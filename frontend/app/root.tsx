@@ -1,21 +1,22 @@
-import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Auth0Provider } from '@auth0/auth0-react';
 
-import type { Route } from "./+types/root";
-import "./app.css";
-import { Provider } from "react-redux";
-import store from "./store/store";
+import type { Route } from './+types/root';
+import './app.css';
+import { Provider } from 'react-redux';
+import store from './store/store';
 
 export const links: Route.LinksFunction = () => [
-	{ rel: "preconnect", href: "https://fonts.googleapis.com" },
+	{ rel: 'preconnect', href: 'https://fonts.googleapis.com' },
 	{
-		rel: "preconnect",
-		href: "https://fonts.gstatic.com",
-		crossOrigin: "anonymous",
+		rel: 'preconnect',
+		href: 'https://fonts.gstatic.com',
+		crossOrigin: 'anonymous',
 	},
 	{
-		rel: "stylesheet",
-		href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+		rel: 'stylesheet',
+		href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
 	},
 ];
 
@@ -44,24 +45,33 @@ const queryClient = new QueryClient({
 		},
 	},
 });
+
 export default function App() {
 	return (
-		<Provider store={store}>
-			<QueryClientProvider client={queryClient}>
-				<Outlet />
-			</QueryClientProvider>
-		</Provider>
+		<Auth0Provider
+			domain={import.meta.env.VITE_AUTH0_DOMAIN!}
+			clientId={import.meta.env.VITE_AUTH0_CLIENT_ID!}
+			authorizationParams={{
+				redirect_uri: import.meta.env.VITE_AUTH_REDIRECT_URI!,
+			}}
+		>
+			<Provider store={store}>
+				<QueryClientProvider client={queryClient}>
+					<Outlet />
+				</QueryClientProvider>
+			</Provider>
+		</Auth0Provider>
 	);
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-	let message = "Oops!";
-	let details = "An unexpected error occurred.";
+	let message = 'Oops!';
+	let details = 'An unexpected error occurred.';
 	let stack: string | undefined;
 
 	if (isRouteErrorResponse(error)) {
-		message = error.status === 404 ? "404" : "Error";
-		details = error.status === 404 ? "The requested page could not be found." : error.statusText || details;
+		message = error.status === 404 ? '404' : 'Error';
+		details = error.status === 404 ? 'The requested page could not be found.' : error.statusText || details;
 	} else if (import.meta.env.DEV && error && error instanceof Error) {
 		details = error.message;
 		stack = error.stack;
