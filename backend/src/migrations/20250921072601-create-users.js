@@ -13,7 +13,7 @@ module.exports = {
 			},
 			name: { type: DataTypes.STRING, allowNull: false },
 			email: { type: DataTypes.STRING, allowNull: false, unique: true },
-			password: { type: DataTypes.STRING, allowNull: false },
+			password: { type: DataTypes.STRING, allowNull: true },
 			createdAt: { type: DataTypes.DATE, defaultValue: new Date() },
 			updatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
 		});

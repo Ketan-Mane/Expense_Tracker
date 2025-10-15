@@ -1,4 +1,4 @@
-import express, { Application } from "express";
+import express, { Application, Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import errorHandler from "@middlewares/errorHandler.middleware";
 import authRouter from "@routes/auth.route";
@@ -7,12 +7,45 @@ import transactionRouter from "@routes/transaction.route";
 import monthRouter from "@routes/month.route";
 import categoryRouter from "@routes/category.route";
 import budgetRouter from "@routes/budget.route";
+import { auth, requiresAuth } from "express-openid-connect";
+import cors from "cors";
 
 const app: Application = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.use(
+	auth({
+		authRequired: false,
+		auth0Logout: true,
+		// routes: {
+		// 	login: false,
+		// },
+		baseURL: "http://localhost:8000",
+		clientSecret: process.env.AUTH0_CLIENT_SECRET,
+		clientID: process.env.AUTH0_CLIENT_ID,
+		secret: "Ketan-Mane",
+		issuerBaseURL: process.env.AUTH0_DOMAIN,
+		authorizationParams: {
+			response_type: "code",
+			audience: "expense-tracker",
+			scope: "openid profile email offline_access",
+			prompt: "select_account",
+		},
+	})
+);
+
+app.get("/", (req, res) => {
+	return res.oidc.login({
+		returnTo: "http://localhost:8000/profile",
+		authorizationParams: {
+			prompt: "select_account",
+			connection: "google-oauth2",
+		},
+	});
+});
 
 app.use("/api/auth", authRouter);
 app.use(authMiddleware);

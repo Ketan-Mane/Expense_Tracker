@@ -7,7 +7,11 @@ interface UserAttributes {
 	id: string;
 	name: string;
 	email: string;
-	password: string;
+	password?: string;
+	auth0Id?: string;
+	avatarUrl?: string;
+	createdAt?: Date;
+	updatedAt?: Date;
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
@@ -16,12 +20,15 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
 	public id!: string;
 	public name!: string;
 	public email!: string;
-	public password!: string;
+	public password?: string;
+	public auth0Id?: string;
+	public avatarUrl?: string;
 
 	public readonly createdAt!: Date;
 	public readonly updatedAt!: Date;
 
 	public isValidPassword(password: string) {
+		if (!this.password) return false;
 		return bcrypt.compareSync(password, this.password);
 	}
 
@@ -48,12 +55,14 @@ User.init(
 		email: { type: DataTypes.STRING, allowNull: false, unique: true },
 		password: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: true,
 			set(val: string) {
 				const hashed = bcrypt.hashSync(val, 10);
 				this.setDataValue("password", hashed);
 			},
 		},
+		auth0Id: { type: DataTypes.STRING, allowNull: true },
+		avatarUrl: { type: DataTypes.STRING, allowNull: true },
 	},
 	{
 		sequelize,

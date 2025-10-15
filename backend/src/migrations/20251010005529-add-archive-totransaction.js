@@ -11,6 +11,6 @@ module.exports = {
 	},
 
 	async down(queryInterface, Sequelize) {
-		await queryInterface.dropColumn("Transactions", "isArchived");
+		await queryInterface.removeColumn("Transactions", "isArchived");
 	},
 };
