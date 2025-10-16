@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-import { fetchTransactions } from "../services/transactionService";
+import { useQuery } from '@tanstack/react-query';
+import { fetchTransactions } from '../services/transactionService';
 
-const useTransactions = () => {
+const useTransactions = ({ limit = 50, page = 1 }: { limit?: number; page?: number } = {}) => {
 	return useQuery({
-		queryKey: ["transactions"],
-		queryFn: fetchTransactions,
+		queryKey: ['recent-transactions', limit, page],
+		queryFn: ({ queryKey: [, limit, page] }: any) => fetchTransactions(limit, page),
 	});
 };
 export default useTransactions;

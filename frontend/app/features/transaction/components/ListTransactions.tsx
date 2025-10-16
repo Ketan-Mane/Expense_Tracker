@@ -13,7 +13,7 @@ import useUpdateTransaction from '../hooks/use-update-transaction';
 import type { Transaction } from '../types/transaction';
 
 const ListTransactions = () => {
-	const { data } = useTransactions();
+	const { data } = useTransactions({ limit: 10 });
 	const transactions = data?.transactions || [];
 
 	const { mutateAsync: deleteTransaction } = useDeleteTransaction();

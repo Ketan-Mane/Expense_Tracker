@@ -11,7 +11,7 @@ dayjs.extend(utc);
 const getTransactions = async ({
 	monthId = null,
 	page = 1,
-	limit = 10,
+	limit = 50,
 	isArchived = false,
 	userId,
 }: {
@@ -26,6 +26,7 @@ const getTransactions = async ({
 			...(monthId && { monthId }),
 			isArchived,
 		},
+		order:[["date", "DESC"]],
 		limit,
 		attributes: { exclude: ["categoryId"] },
 		include: [
@@ -100,6 +101,10 @@ const getCategoryAnalytics = async () => {
 		},
 	});
 
+	if (!month) {
+		return [];
+	}
+
 	const data = await Transaction.findAll({
 		attributes: ["categoryId", [fn("SUM", col("amount")), "totalSpent"]],
 		include: [{ model: Category, as: "category", required: false, attributes: ["name", "color"] }],
@@ -132,6 +137,10 @@ export const getMonthlyAnalytics = async (userId: string) => {
 		},
 		raw: true,
 	});
+
+	if (!month) {
+		return [];
+	}
 
 	const rawData = await Transaction.findAll({
 		attributes: ["monthId", [fn("SUM", col("amount")), "amount"]],

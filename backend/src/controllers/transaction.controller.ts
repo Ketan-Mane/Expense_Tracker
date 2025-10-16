@@ -4,6 +4,9 @@ import transactionService from "@services/transaction.service";
 import { Request, Response } from "express";
 
 const getTransactions = asyncHandler(async (req: Request, res: Response) => {
+	const limit = req.query.limit ? parseInt(req.query.limit as string, 50) : 50;
+	const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+
 	const monthId = req.params?.id;
 	const user = req.user;
 	const transactions = await transactionService.getTransactions({ userId: user.id });
