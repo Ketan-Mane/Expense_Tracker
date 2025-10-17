@@ -1,10 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchTransactions } from '../services/transactionService';
+import type { fi } from 'date-fns/locale';
+import type { Filters } from '../types/transaction';
 
-const useTransactions = ({ limit = 50, page = 1 }: { limit?: number; page?: number } = {}) => {
+const useTransactions = ({ ...filters }: Filters = {}) => {
 	return useQuery({
-		queryKey: ['recent-transactions', limit, page],
-		queryFn: ({ queryKey: [, limit, page] }: any) => fetchTransactions(limit, page),
+		queryKey: ['transactions', filters],
+		queryFn: () => fetchTransactions({ ...filters }),
 	});
 };
 export default useTransactions;

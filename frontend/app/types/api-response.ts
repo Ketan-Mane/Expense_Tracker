@@ -13,6 +13,4 @@ export type MetaData = {
 	totalPages: number;
 };
 
-export type ApiResponseWithMetaData<T> = ApiResponse<T> & {
-	metadata: MetaData;
-};
+export type ApiResponseWithMetaData<K extends string, T> = ApiResponse<Record<K, T[]> & { metadata: MetaData }>;

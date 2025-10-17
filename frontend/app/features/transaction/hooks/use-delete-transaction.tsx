@@ -6,7 +6,7 @@ const useDeleteTransaction = () => {
 	return useMutation({
 		mutationFn: deleteTransaction,
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['transactions'] });
+			queryClient.invalidateQueries({ queryKey: ['recent-transactions'] });
 			queryClient.invalidateQueries({ queryKey: ['chart-data'] });
 		},
 	});

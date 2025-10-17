@@ -2,7 +2,6 @@ import { Archive, Edit } from 'lucide-react';
 import { Badge } from '~/components/ui/badge';
 import { Button } from '~/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table';
-import useTransactions from '../hooks/use-transactions';
 import { formatCurrency } from '~/lib/utils';
 import { formatDate } from 'date-fns';
 import Modal from '~/components/common/modal';
@@ -12,12 +11,8 @@ import useDeleteTransaction from '../hooks/use-delete-transaction';
 import useUpdateTransaction from '../hooks/use-update-transaction';
 import type { Transaction } from '../types/transaction';
 
-const ListTransactions = () => {
-	const { data } = useTransactions({ limit: 10 });
-	const transactions = data?.transactions || [];
-
+const ListTransactions = ({ transactions }: { transactions: Transaction[] }) => {
 	const { mutateAsync: deleteTransaction } = useDeleteTransaction();
-
 	const { mutateAsync: updateTransaction } = useUpdateTransaction();
 
 	const handleDelete = async (id: string) => {

@@ -18,3 +18,11 @@ export const TransactionSchema = z.object({
 });
 
 export type Transaction = z.infer<typeof TransactionSchema>;
+
+export type Filters = {
+	search?: string;
+	limit?: number;
+	page?: number;
+	category?: string;
+	month?: string;
+};

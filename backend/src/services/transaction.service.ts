@@ -9,24 +9,30 @@ import { type PaginatedResult } from "types/pagination";
 dayjs.extend(utc);
 
 const getTransactions = async ({
-	monthId = null,
+	month = null,
+	search = null,
+	category = null,
 	page = 1,
 	limit = 50,
 	isArchived = false,
 	userId,
 }: {
-	monthId?: string | null;
+	month?: string | null;
+	search?: string | null;
+	category?: string | null;
 	page?: number;
 	limit?: number;
 	isArchived?: boolean;
 	userId: string;
 }): Promise<PaginatedResult<"transactions", Transaction>> => {
+	console.log(month);
 	const { count, rows } = await Transaction.findAndCountAll({
 		where: {
-			...(monthId && { monthId }),
+			...(category && category !== "All" && { categoryId: category }),
+			...(search && { item: { [Op.iLike]: `%${search}%` } }),
 			isArchived,
 		},
-		order:[["date", "DESC"]],
+		order: [["date", "DESC"]],
 		limit,
 		attributes: { exclude: ["categoryId"] },
 		include: [
@@ -37,6 +43,7 @@ const getTransactions = async ({
 				attributes: ["id", "name"],
 				where: {
 					userId,
+					...(month && { startDate: { [Op.lte]: dayjs(month).utc(true).startOf("month").toDate() } }),
 				},
 			},
 		],

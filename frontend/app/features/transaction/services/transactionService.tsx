@@ -1,17 +1,11 @@
 import axiosInstance from '~/axios/axiosInstance';
 import type { ApiResponse, ApiResponseWithMetaData } from '~/types/api-response';
-import type { Transaction } from '../types/transaction';
+import type { Filters, Transaction } from '../types/transaction';
 
-export const fetchTransactions = async (limit = 50, page = 1) => {
-	const { data } = await axiosInstance.get<ApiResponseWithMetaData<{ transactions: Transaction[] }>>(
-		'/transactions',
-		{
-			params: {
-				limit,
-				page,
-			},
-		},
-	);
+export const fetchTransactions = async (params: Filters) => {
+	const { data } = await axiosInstance.get<ApiResponseWithMetaData<'transactions', Transaction>>('/transactions', {
+		params,
+	});
 	return data.data;
 };
 

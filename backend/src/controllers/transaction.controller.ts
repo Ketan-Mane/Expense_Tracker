@@ -4,12 +4,21 @@ import transactionService from "@services/transaction.service";
 import { Request, Response } from "express";
 
 const getTransactions = asyncHandler(async (req: Request, res: Response) => {
-	const limit = req.query.limit ? parseInt(req.query.limit as string, 50) : 50;
-	const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+	const limit = Number(req.query.limit) || 50;
+	const page = Number(req.query.page) || 1;
+	const category = typeof req.query.category === "string" ? req.query.category : null;
+	const search = typeof req.query.search === "string" ? req.query.search : null;
+	const month = typeof req.query.month === "string" ? req.query.month : null;
 
-	const monthId = req.params?.id;
 	const user = req.user;
-	const transactions = await transactionService.getTransactions({ userId: user.id });
+	const transactions = await transactionService.getTransactions({
+		userId: user.id,
+		limit,
+		page,
+		category,
+		search,
+		month,
+	});
 	res.status(200).json(new ApiResponse(200, "Success", transactions));
 });
 

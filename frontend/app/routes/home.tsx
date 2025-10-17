@@ -10,6 +10,7 @@ import { TrendChart } from '~/features/transaction/components/TrendChart';
 import { Toaster } from '~/components/ui/sonner';
 import { RecentTransactions } from '~/features/transaction/components/RecentTransactions';
 import AddTransactionCard from '~/features/transaction/components/AddTransactionCard';
+import AllTransactions from '~/features/transaction/components/AllTransactions';
 
 export function meta({}: MetaArgs) {
 	return [
@@ -45,6 +46,12 @@ export default function Home() {
 		</div>
 	);
 
+	const renderTransactions = () => (
+		<div className="space-y-8">
+			<AllTransactions />
+		</div>
+	);
+
 	const renderCategories = () => (
 		<div className="space-y-8">
 			<CategoryManager />
@@ -75,6 +82,7 @@ export default function Home() {
 				{/* Main Content */}
 				<main className="container mx-auto px-4 pb-8">
 					{activeTab === 'dashboard' && renderDashboard()}
+					{activeTab === 'transactions' && renderTransactions()}
 					{activeTab === 'categories' && renderCategories()}
 					{activeTab === 'analytics' && renderAnalytics()}
 				</main>
