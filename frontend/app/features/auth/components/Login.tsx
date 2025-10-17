@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import { Button } from '~/components/ui/button';
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form';
@@ -7,22 +7,14 @@ import { Input } from '~/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import useLogin from '~/features/auth/hooks/useLogin';
 import { LoginSchema, type LoginForm } from '~/features/auth/validators/login.validator';
-import { useAuth0 } from '@auth0/auth0-react';
-import { useEffect } from 'react';
 
 export function loader() {
 	return null; // explicitly says "no data needed"
 }
 
 export default function Login() {
-	const navigate = useNavigate();
 	const { mutateAsync: login, isPending } = useLogin();
-	const { loginWithRedirect, isLoading, isAuthenticated, user, getAccessTokenSilently } = useAuth0();
 
-	const getToken = async () => {
-		const token = await getAccessTokenSilently();
-		console.log(token);
-	};
 	const form = useForm({
 		resolver: zodResolver(LoginSchema),
 		mode: 'onChange',
@@ -31,12 +23,6 @@ export default function Login() {
 			password: '',
 		},
 	});
-
-	useEffect(() => {
-		if (!isLoading && isAuthenticated) {
-			getToken();
-		}
-	}, [isLoading, isAuthenticated]);
 
 	const handleSubmit = async (data: LoginForm) => {
 		await login(data);
@@ -99,8 +85,7 @@ export default function Login() {
 									variant="outline"
 									onClick={
 										() =>
-											(window.location.href =
-												'http://localhost:8000/api/auth/login/google-oauth2')
+											(window.location.href = `${import.meta.env.VITE_SERVER_URL}/auth/login/google-oauth2`)
 										// loginWithRedirect({
 										// 	authorizationParams: {
 										// 		connection: 'google-oauth2',

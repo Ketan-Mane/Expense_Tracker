@@ -9,6 +9,18 @@
 		"build": "rimraf dist && tsc",
 		"start": "node dist/server.js"
 	},
+	"_moduleAliases": {
+		"@middlewares": "dist/middlewares",
+		"@routes": "dist/routes",
+		"@services": "dist/services",
+		"@utils": "dist/utils",
+		"@validators": "dist/validators",
+		"@controllers": "dist/controllers",
+		"@models": "dist/models",
+		"@config": "dist/config",
+		"@helper": "dist/helper",
+		"@types": "dist/types"
+	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
@@ -25,6 +37,7 @@
 		"express-validator": "^7.2.1",
 		"jsonwebtoken": "^9.0.2",
 		"jwks-rsa": "^3.2.0",
+		"module-alias": "^2.2.3",
 		"morgan": "^1.10.1",
 		"pg": "^8.16.3",
 		"sequelize": "^6.37.7",

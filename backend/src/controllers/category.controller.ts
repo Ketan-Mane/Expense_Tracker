@@ -1,7 +1,7 @@
 import categoryService from "../services/category.service";
 import { Request, Response } from "express";
-import ApiResponse from "../helper/ApiResponse";
-import { asyncHandler } from "../helper/asyncHandler";
+import { asyncHandler } from "@helper/asyncHandler";
+import ApiResponse from "@helper/ApiResponse";
 
 const getCategories = asyncHandler(async (req: Request, res: Response) => {
 	const userId = req.user?.id as string;

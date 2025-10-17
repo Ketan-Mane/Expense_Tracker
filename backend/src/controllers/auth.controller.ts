@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { asyncHandler } from "helper/asyncHandler";
-import ApiResponse from "helper/ApiResponse";
 import { validationResult } from "express-validator";
 import ApiError from "@helper/ApiError";
 import User from "@models/user.model";
+import { asyncHandler } from "@helper/asyncHandler";
+import ApiResponse from "@helper/ApiResponse";
 
 const register = asyncHandler(async (req: Request, res: Response) => {
 	const errors = validationResult(req).formatWith(({ msg }) => msg);
@@ -18,14 +18,16 @@ const register = asyncHandler(async (req: Request, res: Response) => {
 	}
 
 	const newUser = await User.create({ name, email, password });
-
+	console.log("Returning register");
 	res.status(200).json(new ApiResponse(200, "success", { user: newUser.toJSON() }));
 });
 
 const login = asyncHandler(async (req: Request, res: Response) => {
 	const { provider } = req.params;
+	console.log("Returning login");
+
 	return res.oidc.login({
-		returnTo: "/api/auth/callback",
+		returnTo: process.env.APP_URL + "/api/auth/callback",
 		authorizationParams: {
 			connection: provider || "google-oauth2",
 			prompt: "select_account",
@@ -49,7 +51,8 @@ const login = asyncHandler(async (req: Request, res: Response) => {
 
 const logout = asyncHandler(async (req: Request, res: Response) => {
 	res.clearCookie("accessToken");
-	return res.oidc.logout({ returnTo: "http://localhost:5173/login" });
+	console.log("Returning logout");
+	return res.oidc.logout();
 });
 
 const checkAuth = asyncHandler(async (req: Request, res: Response) => {
@@ -61,6 +64,7 @@ const checkAuth = asyncHandler(async (req: Request, res: Response) => {
 	if (!user) {
 		throw new ApiError("User not found", 404, null);
 	}
+	console.log("Returning checkAuth");
 	res.status(200).json(new ApiResponse(200, "success", { user }));
 });
 
@@ -90,7 +94,8 @@ const auth0Callback = asyncHandler(async (req: Request, res: Response) => {
 
 	// 4️⃣ Set JWT in httpOnly cookie
 	res.cookie("accessToken", accessToken, { httpOnly: true });
-	return res.redirect("http://localhost:5173/");
+	console.log("Returning callback");
+	return res.redirect(process.env.FRONTEND_URL!);
 });
 
 export default { register, login, logout, checkAuth, auth0Callback };

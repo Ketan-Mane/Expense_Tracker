@@ -1,6 +1,5 @@
 import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Auth0Provider } from '@auth0/auth0-react';
 
 import type { Route } from './+types/root';
 import './app.css';
@@ -49,19 +48,11 @@ const queryClient = new QueryClient({
 
 export default function App() {
 	return (
-		<Auth0Provider
-			domain={import.meta.env.VITE_AUTH0_DOMAIN!}
-			clientId={import.meta.env.VITE_AUTH0_CLIENT_ID!}
-			authorizationParams={{
-				redirect_uri: import.meta.env.VITE_AUTH0_REDIRECT_URI!,
-			}}
-		>
-			<Provider store={store}>
-				<QueryClientProvider client={queryClient}>
-					<Outlet />
-				</QueryClientProvider>
-			</Provider>
-		</Auth0Provider>
+		<Provider store={store}>
+			<QueryClientProvider client={queryClient}>
+				<Outlet />
+			</QueryClientProvider>
+		</Provider>
 	);
 }
 

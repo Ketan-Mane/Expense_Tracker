@@ -1,4 +1,4 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application } from "express";
 import cookieParser from "cookie-parser";
 import errorHandler from "@middlewares/errorHandler.middleware";
 import authRouter from "@routes/auth.route";
@@ -9,9 +9,15 @@ import categoryRouter from "@routes/category.route";
 import budgetRouter from "@routes/budget.route";
 import { auth } from "express-openid-connect";
 import morgan from "morgan";
+import cors from "cors";
 
 const app: Application = express();
-
+app.use(
+	cors({
+		origin: [process.env.FRONTEND_URL!, process.env.AUTH0_DOMAIN!],
+		credentials: true,
+	})
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
