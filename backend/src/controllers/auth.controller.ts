@@ -4,7 +4,6 @@ import ApiResponse from "helper/ApiResponse";
 import { validationResult } from "express-validator";
 import ApiError from "@helper/ApiError";
 import User from "@models/user.model";
-import axios from "axios";
 
 const register = asyncHandler(async (req: Request, res: Response) => {
 	const errors = validationResult(req).formatWith(({ msg }) => msg);
@@ -26,10 +25,10 @@ const register = asyncHandler(async (req: Request, res: Response) => {
 const login = asyncHandler(async (req: Request, res: Response) => {
 	const { provider } = req.params;
 	return res.oidc.login({
+		returnTo: "/api/auth/callback",
 		authorizationParams: {
+			connection: provider || "google-oauth2",
 			prompt: "select_account",
-			connection: provider,
-			redirect_uri: "http://localhost:8000/api/auth/callback",
 		},
 	});
 	// const { email, password } = req.body;
@@ -50,8 +49,7 @@ const login = asyncHandler(async (req: Request, res: Response) => {
 
 const logout = asyncHandler(async (req: Request, res: Response) => {
 	res.clearCookie("accessToken");
-	res.oidc.logout();
-	// res.status(200).json(new ApiResponse(200, "success", null));
+	return res.oidc.logout({ returnTo: "http://localhost:5173/login" });
 });
 
 const checkAuth = asyncHandler(async (req: Request, res: Response) => {
@@ -68,10 +66,12 @@ const checkAuth = asyncHandler(async (req: Request, res: Response) => {
 
 const auth0Callback = asyncHandler(async (req: Request, res: Response) => {
 	const auth0User: any = req.oidc.user; // Info from Auth0
+	console.log("Auth User", auth0User);
 	if (!auth0User) {
 		throw new ApiError("Auth0 login failed", 400);
 	}
 
+	console.log("In Callback");
 	const {
 		email,
 		name,
