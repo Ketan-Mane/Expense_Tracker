@@ -1,8 +1,13 @@
-import { Button } from "../ui/button";
-import { Calendar, Settings } from "lucide-react";
-import LogoutButton from "~/features/auth/components/Logout";
+import { Button } from '../ui/button';
+import { Calendar, Settings } from 'lucide-react';
+import LogoutButton from '~/features/auth/components/Logout';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { useSelector } from 'react-redux';
+import type { RootState } from '~/store/store';
+import { Link } from 'react-router';
 
 const Header = () => {
+	const user = useSelector((state: RootState) => state.auth.user);
 	return (
 		<header className="border-b bg-card">
 			<div className="container mx-auto px-4 py-6">
@@ -12,18 +17,18 @@ const Header = () => {
 						<p className="text-muted-foreground">Manage your finances with ease</p>
 					</div>
 					<div className="flex items-center gap-2">
-						<Button variant="outline" size="sm">
-							<Calendar className="h-4 w-4 mr-2" />
-							This Month
+						<Button variant="outline" size="sm" asChild>
+							<Link to="settings">
+								<Settings className="h-4 w-4 mr-2" />
+								Settings
+							</Link>
 						</Button>
-						{/* <Button variant="outline" size="sm">
-							<Download className="h-4 w-4 mr-2" />
-							Export
-						</Button> */}
-						<Button variant="outline" size="sm">
-							<Settings className="h-4 w-4 mr-2" />
-							Settings
-						</Button>
+						{user && (
+							<Avatar>
+								<AvatarImage src={user?.avatarUrl} />
+								<AvatarFallback>{user.name[0]}</AvatarFallback>
+							</Avatar>
+						)}
 						<LogoutButton />
 					</div>
 				</div>

@@ -1,11 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+import type { User } from '~/schemas/auth/user';
 
 interface AuthState {
-	user: null | {
-		id: string;
-		name: string;
-		email: string;
-	};
+	user: User | null;
 	token: null | string;
 	isLoggedIn: boolean;
 }
@@ -18,7 +15,7 @@ const initialState: AuthState = {
 
 export const authSlice = createSlice({
 	initialState,
-	name: "auth",
+	name: 'auth',
 	reducers: {
 		setUser(state, action) {
 			state.user = action.payload;

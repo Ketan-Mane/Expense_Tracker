@@ -5,9 +5,9 @@ import { zodDate } from '~/schemas/zodHelper';
 
 export const TransactionSchema = z.object({
 	id: z.uuidv4().optional().nullable(),
-	item: z.string().nonempty('Description is required'),
+	description: z.string().nonempty('Description is required'),
 	amount: z.int().nonnegative('Amount must be a positive number'),
-	date: z.date('Date is required'),
+	date: z.date({ error: 'Date is required' }),
 	type: z.enum(['Expense', 'Income']),
 	paymentMethod: z.enum(PAYMENT_MODES).optional(),
 	isRecurring: z.boolean().default(false),

@@ -25,11 +25,10 @@ const getTransactions = async ({
 	isArchived?: boolean;
 	userId: string;
 }): Promise<PaginatedResult<"transactions", Transaction>> => {
-	console.log(month);
 	const { count, rows } = await Transaction.findAndCountAll({
 		where: {
 			...(category && category !== "All" && { categoryId: category }),
-			...(search && { item: { [Op.iLike]: `%${search}%` } }),
+			...(search && { description: { [Op.iLike]: `%${search}%` } }),
 			isArchived,
 		},
 		order: [["date", "DESC"]],

@@ -30,7 +30,7 @@ const CategoryForm = ({ category, close }: CategoryFormProps) => {
 	// console.log("id", form.getFieldState("id"));
 	// console.log("userId", form.getFieldState("userId"));
 	// console.log("name", form.getFieldState("name"));
-	// console.log("color", form.getFieldState("color"));
+	// console.log('color', form.getFieldState('color'));
 	// console.log("isDefault", form.getFieldState("isDefault"));
 	// console.log("icon", form.getFieldState("icon"));
 	// console.log("createdAt", form.getFieldState("createdAt"));
@@ -111,7 +111,7 @@ const CategoryForm = ({ category, close }: CategoryFormProps) => {
 											type="button"
 											className={`w-8 h-8 rounded-full border-2 ${
 												form.getValues('color') === color
-													? 'border-foreground'
+													? 'border-neutral-800'
 													: 'border-border'
 											}`}
 											style={{ backgroundColor: color }}

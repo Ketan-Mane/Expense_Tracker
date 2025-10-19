@@ -31,7 +31,7 @@ const TransactionForm = ({ transaction, close }: TransactionFormProps) => {
 		defaultValues: {
 			...(transaction && { id: transaction?.id }),
 			amount: transaction?.amount || 0,
-			item: transaction?.item || '',
+			description: transaction?.description || '',
 			date: new Date(transaction?.date || new Date()),
 			paymentMethod: transaction?.paymentMethod || 'UPI',
 			isRecurring: transaction?.isRecurring || false,
@@ -69,7 +69,7 @@ const TransactionForm = ({ transaction, close }: TransactionFormProps) => {
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
 				<FormField
-					name="item"
+					name="description"
 					control={form.control}
 					render={({ field }) => (
 						<FormItem>
@@ -169,7 +169,7 @@ const TransactionForm = ({ transaction, close }: TransactionFormProps) => {
 					control={form.control}
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Type</FormLabel>
+							<FormLabel>Payment Method</FormLabel>
 							<FormControl>
 								<Select name={field.name} value={field.value} onValueChange={field.onChange}>
 									<SelectTrigger className="w-full">

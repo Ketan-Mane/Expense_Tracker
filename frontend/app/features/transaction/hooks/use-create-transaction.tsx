@@ -7,6 +7,7 @@ const useCreateTransaction = () => {
 		mutationFn: createTransaction,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['recent-transactions'] });
+			queryClient.invalidateQueries({ queryKey: ['transactions'] });
 			queryClient.invalidateQueries({ queryKey: ['chart-data'] });
 		},
 	});

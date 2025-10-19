@@ -15,7 +15,7 @@ module.exports = {
 				type: DataTypes.UUID,
 				allowNull: false,
 			},
-			item: {
+			description: {
 				type: DataTypes.STRING,
 				allowNull: true,
 			},

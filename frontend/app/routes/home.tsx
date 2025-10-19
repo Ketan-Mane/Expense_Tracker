@@ -24,16 +24,6 @@ export default function Home() {
 
 	const renderDashboard = () => (
 		<div className="space-y-8">
-			{/* Overview Cards */}
-			{/* <ExpenseOverview /> */}
-
-			{/* Charts Section */}
-			<div className="grid gap-6 lg:grid-cols-2">
-				<SpendingChart />
-				{/* <TrendChart /> */}
-			</div>
-
-			{/* Bottom Section */}
 			<div className="grid gap-6 lg:grid-cols-3">
 				<div className="lg:col-span-2">
 					<RecentTransactions />
@@ -72,7 +62,6 @@ export default function Home() {
 		<>
 			<div className="min-h-screen bg-background">
 				<Toaster />
-				<Header />
 
 				{/* Navigation */}
 				<div className="container mx-auto px-4 py-4">

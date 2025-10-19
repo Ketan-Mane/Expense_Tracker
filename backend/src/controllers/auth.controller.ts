@@ -6,10 +6,6 @@ import { asyncHandler } from "@helper/asyncHandler";
 import ApiResponse from "@helper/ApiResponse";
 
 const register = asyncHandler(async (req: Request, res: Response) => {
-	const errors = validationResult(req).formatWith(({ msg }) => msg);
-	if (!errors.isEmpty()) {
-		throw new ApiError("validation error", 400, errors.mapped());
-	}
 	const { name, email, password } = req.body;
 
 	const isUserExists = await User.findOne({ where: { email } });
@@ -18,14 +14,11 @@ const register = asyncHandler(async (req: Request, res: Response) => {
 	}
 
 	const newUser = await User.create({ name, email, password });
-	console.log("Returning register");
 	res.status(200).json(new ApiResponse(200, "success", { user: newUser.toJSON() }));
 });
 
 const login = asyncHandler(async (req: Request, res: Response) => {
 	const { provider } = req.params;
-	console.log("Returning login");
-
 	return res.oidc.login({
 		returnTo: process.env.APP_URL + "/api/auth/callback",
 		authorizationParams: {
@@ -51,8 +44,9 @@ const login = asyncHandler(async (req: Request, res: Response) => {
 
 const logout = asyncHandler(async (req: Request, res: Response) => {
 	res.clearCookie("accessToken");
-	console.log("Returning logout");
-	return res.oidc.logout();
+	return res.oidc.logout({
+		returnTo: process.env.FRONTEND_URL,
+	});
 });
 
 const checkAuth = asyncHandler(async (req: Request, res: Response) => {
@@ -64,18 +58,15 @@ const checkAuth = asyncHandler(async (req: Request, res: Response) => {
 	if (!user) {
 		throw new ApiError("User not found", 404, null);
 	}
-	console.log("Returning checkAuth");
 	res.status(200).json(new ApiResponse(200, "success", { user }));
 });
 
 const auth0Callback = asyncHandler(async (req: Request, res: Response) => {
 	const auth0User: any = req.oidc.user; // Info from Auth0
-	console.log("Auth User", auth0User);
 	if (!auth0User) {
 		throw new ApiError("Auth0 login failed", 400);
 	}
 
-	console.log("In Callback");
 	const {
 		email,
 		name,
@@ -94,7 +85,6 @@ const auth0Callback = asyncHandler(async (req: Request, res: Response) => {
 
 	// 4️⃣ Set JWT in httpOnly cookie
 	res.cookie("accessToken", accessToken, { httpOnly: true });
-	console.log("Returning callback");
 	return res.redirect(process.env.FRONTEND_URL!);
 });
 

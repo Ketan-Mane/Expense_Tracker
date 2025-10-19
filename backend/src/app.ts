@@ -7,6 +7,7 @@ import transactionRouter from "@routes/transaction.route";
 import monthRouter from "@routes/month.route";
 import categoryRouter from "@routes/category.route";
 import budgetRouter from "@routes/budget.route";
+import userSettings from "@routes/userSettings.route";
 import { auth } from "express-openid-connect";
 import morgan from "morgan";
 import cors from "cors";
@@ -47,6 +48,7 @@ app.use("/api/transactions", transactionRouter);
 app.use("/api/months", monthRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/budgets", budgetRouter);
+app.use("/api/settings", userSettings);
 
 app.use(errorHandler);
 

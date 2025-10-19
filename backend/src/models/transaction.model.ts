@@ -5,7 +5,7 @@ interface TransactionAttributes {
 	id: number;
 	monthId: string;
 	categoryId: string;
-	item?: string;
+	description?: string;
 	amount: number;
 	date?: Date;
 	paymentMethod?: string;
@@ -22,7 +22,7 @@ class Transaction extends Model<TransactionAttributes, TransactionCreationAttrib
 	public id!: number;
 	public monthId!: string;
 	public categoryId!: string;
-	public item?: string;
+	public description?: string;
 	public amount!: number;
 	public date?: Date;
 	public paymentMethod?: string;
@@ -56,7 +56,7 @@ Transaction.init(
 			onUpdate: "CASCADE",
 			onDelete: "SET NULL",
 		},
-		item: {
+		description: {
 			type: DataTypes.STRING,
 			allowNull: true,
 		},

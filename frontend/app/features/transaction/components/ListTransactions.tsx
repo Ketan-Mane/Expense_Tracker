@@ -44,7 +44,7 @@ const ListTransactions = ({ transactions }: { transactions: Transaction[] }) => 
 				) : (
 					transactions.map((transaction) => (
 						<TableRow key={transaction.id}>
-							<TableCell className="font-medium">{transaction.item}</TableCell>
+							<TableCell className="font-medium">{transaction.description}</TableCell>
 							<TableCell>
 								<Badge style={{ backgroundColor: transaction.category?.color }}>
 									{transaction.category?.name}
@@ -77,7 +77,7 @@ const ListTransactions = ({ transactions }: { transactions: Transaction[] }) => 
 								</Button>
 								<ConfirmModal
 									title="Delete Transaction"
-									description={`Are you sure you want to delete "${transaction.item}"? This action cannot be undone.`}
+									description={`Are you sure you want to delete "${transaction.description}"? This action cannot be undone.`}
 									onConfirm={() => handleDelete(transaction.id!)}
 								/>
 							</TableCell>
