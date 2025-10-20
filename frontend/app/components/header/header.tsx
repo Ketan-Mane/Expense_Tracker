@@ -1,5 +1,5 @@
 import { Button } from '../ui/button';
-import { Calendar, Settings } from 'lucide-react';
+import { Settings } from 'lucide-react';
 import LogoutButton from '~/features/auth/components/Logout';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useSelector } from 'react-redux';
@@ -8,6 +8,10 @@ import { Link } from 'react-router';
 
 const Header = () => {
 	const user = useSelector((state: RootState) => state.auth.user);
+	const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+
+	if (!isLoggedIn) return null;
+
 	return (
 		<header className="border-b bg-card">
 			<div className="container mx-auto px-4 py-6">

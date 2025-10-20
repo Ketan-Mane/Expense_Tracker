@@ -42,7 +42,7 @@ export const validator = [
 		.withMessage("recurringTransactionFrequency must be 'daily', 'weekly', or 'monthly'"),
 
 	body("recurringTransactionDefaultCategory")
-		.optional()
+		.optional({ checkFalsy: true })
 		.isUUID()
 		.withMessage("recurringTransactionDefaultCategory must be a valid UUID"),
 ];

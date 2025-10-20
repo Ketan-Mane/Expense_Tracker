@@ -5,7 +5,7 @@ import type { ApiResponse } from '~/types/api-response';
 const API_BASE = '/settings';
 
 export const getUserSettings = async () => {
-	const { data } = await axiosInstance.get<ApiResponse<{ data: SettingsFormData }>>(API_BASE);
+	const { data } = await axiosInstance.get<ApiResponse<{ settings: SettingsFormData }>>(API_BASE);
 	return data;
 };
 

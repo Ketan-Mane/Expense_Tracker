@@ -7,7 +7,7 @@ import ApiResponse from "@helper/ApiResponse";
 const getSettings = asyncHandler(async (req: Request, res: Response) => {
 	const userId = req.user.id; // assuming user id is in req.user
 	const settings = await userSettingsService.getUserSettings(userId);
-	return res.status(200).json(new ApiResponse(200, "Success", settings));
+	return res.status(200).json(new ApiResponse(200, "Success", { settings }));
 });
 
 // Create or update settings

@@ -12,7 +12,7 @@ export const settingsSchema = z.object({
 	favoriteCategories: z.array(z.string()).optional(),
 	defaultView: z.enum(['list', 'calendar', 'chart']).optional(),
 	recurringTransactionFrequency: z.enum(['daily', 'weekly', 'monthly']).optional(),
-	recurringTransactionDefaultCategory: z.string().optional(),
+	recurringTransactionDefaultCategory: z.string().nullable().optional(),
 });
 
 export type SettingsFormData = z.infer<typeof settingsSchema>;

@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Badge } from '~/components/ui/badge';
 import { Button } from '~/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card';
-import { Form, FormControl, FormField, FormLabel } from '~/components/ui/form';
+import { Form, FormControl, FormMessage, FormField, FormLabel } from '~/components/ui/form';
 import { Input } from '~/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
 import { Switch } from '~/components/ui/switch';
@@ -12,6 +12,7 @@ import { settingsSchema, type SettingsFormData } from '~/features/user/types/set
 import { useUserSettings } from '../hooks/use-user-settings';
 import { useUpdateUserSettings } from '../hooks/use-update-user-settings';
 import { toast } from 'sonner';
+import useCategories from '~/features/category/hooks/use-categories';
 import { useEffect } from 'react';
 
 const paymentMethods = [
@@ -35,42 +36,31 @@ const currencies = [
 	{ code: 'CNY', name: 'Chinese Yuan (¥)' },
 ];
 
-const categories = [
-	'Food & Dining',
-	'Transportation',
-	'Shopping',
-	'Entertainment',
-	'Bills & Utilities',
-	'Healthcare',
-	'Education',
-	'Travel',
-	'Other',
-];
-
 const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
 const Settings = () => {
 	const { data, isLoading } = useUserSettings();
-	const { mutateAsync: updateUserSettings } = useUpdateUserSettings();
+	const { mutateAsync: updateUserSettings, isPending } = useUpdateUserSettings();
+	const { data: categoriesData } = useCategories();
+	const categories = categoriesData?.categories || [];
 
-	const settingsData = data?.data || {};
+	const settingsData = data?.data?.settings;
 
-	console.log(settingsData);
 	const form = useForm<SettingsFormData>({
 		resolver: zodResolver(settingsSchema),
 		defaultValues: {
-			defaultPaymentMethod: 'UPI',
-			defaultCurrency: 'INR',
-			financialMonthStart: 1,
-			financialMonthEnd: 31,
-			weeklyStartDay: 'Sunday',
-			monthlyBudgetLimit: 3000,
-			budgetNotificationsEnabled: true,
-			transactionReminders: true,
-			favoriteCategories: ['Food & Dining', 'Transportation'],
-			defaultView: 'list',
-			recurringTransactionFrequency: 'monthly',
-			recurringTransactionDefaultCategory: 'Bills & Utilities',
+			defaultPaymentMethod: settingsData?.defaultPaymentMethod || 'UPI',
+			defaultCurrency: settingsData?.defaultCurrency || 'INR',
+			financialMonthStart: settingsData?.financialMonthStart || 1,
+			financialMonthEnd: settingsData?.financialMonthEnd || 31,
+			weeklyStartDay: settingsData?.weeklyStartDay || 'Sunday',
+			monthlyBudgetLimit: settingsData?.monthlyBudgetLimit || 0,
+			budgetNotificationsEnabled: settingsData?.budgetNotificationsEnabled || true,
+			transactionReminders: settingsData?.transactionReminders || true,
+			favoriteCategories: settingsData?.favoriteCategories || [],
+			defaultView: settingsData?.defaultView || 'list',
+			recurringTransactionFrequency: settingsData?.recurringTransactionFrequency || 'monthly',
+			recurringTransactionDefaultCategory: settingsData?.recurringTransactionDefaultCategory || null,
 		},
 	});
 
@@ -107,7 +97,7 @@ const Settings = () => {
 										<FormLabel htmlFor="payment-method">Payment Method</FormLabel>
 										<FormControl>
 											<Select {...field}>
-												<SelectTrigger id="payment-method">
+												<SelectTrigger className="w-40" id="payment-method">
 													<SelectValue placeholder="Select payment method" />
 												</SelectTrigger>
 												<SelectContent>
@@ -119,6 +109,7 @@ const Settings = () => {
 												</SelectContent>
 											</Select>
 										</FormControl>
+										<FormMessage />
 									</div>
 								)}
 							/>
@@ -131,7 +122,7 @@ const Settings = () => {
 										<FormLabel htmlFor="currency">Currency</FormLabel>
 										<FormControl>
 											<Select {...field}>
-												<SelectTrigger id="currency">
+												<SelectTrigger className="w-40" id="currency">
 													<SelectValue placeholder="Select currency" />
 												</SelectTrigger>
 												<SelectContent>
@@ -143,6 +134,7 @@ const Settings = () => {
 												</SelectContent>
 											</Select>
 										</FormControl>
+										<FormMessage />
 									</div>
 								)}
 							/>
@@ -179,6 +171,7 @@ const Settings = () => {
 												</SelectContent>
 											</Select>
 										</FormControl>
+										<FormMessage />
 									</div>
 								)}
 							/>
@@ -206,6 +199,7 @@ const Settings = () => {
 												</SelectContent>
 											</Select>
 										</FormControl>
+										<FormMessage />
 									</div>
 								)}
 							/>
@@ -227,6 +221,7 @@ const Settings = () => {
 												</SelectContent>
 											</Select>
 										</FormControl>
+										<FormMessage />
 									</div>
 								)}
 							/>
@@ -246,8 +241,14 @@ const Settings = () => {
 									<div className="space-y-2">
 										<FormLabel htmlFor="budget-limit">Monthly Budget Limit</FormLabel>
 										<FormControl>
-											<Input {...field} type="number" placeholder="Enter budget limit" />
+											<Input
+												type="number"
+												value={field.value ?? ''}
+												onChange={(e) => field.onChange(Number(e.target.value))}
+												placeholder="Enter budget limit"
+											/>
 										</FormControl>
+										<FormMessage />
 									</div>
 								)}
 							/>
@@ -259,8 +260,14 @@ const Settings = () => {
 									<div className="flex items-center justify-between">
 										<FormLabel>Budget Notifications</FormLabel>
 										<FormControl>
-											<Switch checked={field.value} onCheckedChange={field.onChange} />
+											<Switch
+												checked={field.value}
+												onCheckedChange={(val) => {
+													field.onChange(val);
+												}}
+											/>
 										</FormControl>
+										<FormMessage />
 									</div>
 								)}
 							/>
@@ -272,8 +279,14 @@ const Settings = () => {
 									<div className="flex items-center justify-between">
 										<FormLabel>Transaction Reminders</FormLabel>
 										<FormControl>
-											<Switch checked={field.value} onCheckedChange={field.onChange} />
+											<Switch
+												checked={field.value}
+												onCheckedChange={(val) => {
+													field.onChange(val);
+												}}
+											/>
 										</FormControl>
+										<FormMessage />
 									</div>
 								)}
 							/>
@@ -281,7 +294,7 @@ const Settings = () => {
 					</Card>
 
 					{/* Favorite Categories */}
-					<Card>
+					{/* <Card>
 						<CardHeader>
 							<CardTitle>Favorite Categories</CardTitle>
 						</CardHeader>
@@ -292,25 +305,25 @@ const Settings = () => {
 									const isFav = favorites.includes(c);
 									return (
 										<Badge
-											key={c}
+											key={c.id}
 											variant={isFav ? 'default' : 'outline'}
 											className="cursor-pointer px-3 py-1.5"
 											onClick={() => toggleFavoriteCategory(c)}
 										>
-											{c} {isFav && <X className="ml-1 h-3 w-3" />}
+											{c.name} {isFav && <X className="ml-1 h-3 w-3" />}
 										</Badge>
 									);
 								})}
 							</div>
 						</CardContent>
-					</Card>
+					</Card> */}
 
 					{/* Save & Reset */}
 					<div className="flex justify-end gap-2">
 						{/* <Button variant="outline" onClick={handleReset}>
 							Reset
 						</Button> */}
-						<Button type="submit">
+						<Button type="submit" isProcessing={isPending}>
 							<Save className="h-4 w-4 mr-2" />
 							Save Changes
 						</Button>
