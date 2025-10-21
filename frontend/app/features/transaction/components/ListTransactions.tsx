@@ -2,7 +2,6 @@ import { Archive, Edit } from 'lucide-react';
 import { Badge } from '~/components/ui/badge';
 import { Button } from '~/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table';
-import { formatCurrency } from '~/lib/utils';
 import { formatDate } from 'date-fns';
 import Modal from '~/components/common/modal';
 import TransactionForm from './TransactionForm';
@@ -10,10 +9,12 @@ import ConfirmModal from '~/components/common/confirm-modal';
 import useDeleteTransaction from '../hooks/use-delete-transaction';
 import useUpdateTransaction from '../hooks/use-update-transaction';
 import type { Transaction } from '../types/transaction';
+import useFormatCurrency from '~/hooks/use-format-currency';
 
 const ListTransactions = ({ transactions }: { transactions: Transaction[] }) => {
 	const { mutateAsync: deleteTransaction } = useDeleteTransaction();
 	const { mutateAsync: updateTransaction } = useUpdateTransaction();
+	const formatCurrency = useFormatCurrency();
 
 	const handleDelete = async (id: string) => {
 		await deleteTransaction(id);
@@ -59,7 +60,7 @@ const ListTransactions = ({ transactions }: { transactions: Transaction[] }) => 
 								}`}
 							>
 								{transaction.type === 'Income' ? '+' : '-'}
-								{formatCurrency(transaction.amount, 'INR')}
+								{formatCurrency(transaction.amount)}
 							</TableCell>
 							<TableCell>
 								<Modal

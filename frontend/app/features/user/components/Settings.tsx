@@ -1,6 +1,4 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Save, X } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { Loader2, Save, X } from 'lucide-react';
 import { Badge } from '~/components/ui/badge';
 import { Button } from '~/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card';
@@ -14,6 +12,8 @@ import { useUpdateUserSettings } from '../hooks/use-update-user-settings';
 import { toast } from 'sonner';
 import useCategories from '~/features/category/hooks/use-categories';
 import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const paymentMethods = [
 	'Credit Card',
@@ -39,30 +39,48 @@ const currencies = [
 const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
 const Settings = () => {
-	const { data, isLoading } = useUserSettings();
+	const { data: settings, isLoading } = useUserSettings();
 	const { mutateAsync: updateUserSettings, isPending } = useUpdateUserSettings();
 	const { data: categoriesData } = useCategories();
 	const categories = categoriesData?.categories || [];
 
-	const settingsData = data?.data?.settings;
-
-	const form = useForm<SettingsFormData>({
+	const form = useForm({
 		resolver: zodResolver(settingsSchema),
 		defaultValues: {
-			defaultPaymentMethod: settingsData?.defaultPaymentMethod || 'UPI',
-			defaultCurrency: settingsData?.defaultCurrency || 'INR',
-			financialMonthStart: settingsData?.financialMonthStart || 1,
-			financialMonthEnd: settingsData?.financialMonthEnd || 31,
-			weeklyStartDay: settingsData?.weeklyStartDay || 'Sunday',
-			monthlyBudgetLimit: settingsData?.monthlyBudgetLimit || 0,
-			budgetNotificationsEnabled: settingsData?.budgetNotificationsEnabled || true,
-			transactionReminders: settingsData?.transactionReminders || true,
-			favoriteCategories: settingsData?.favoriteCategories || [],
-			defaultView: settingsData?.defaultView || 'list',
-			recurringTransactionFrequency: settingsData?.recurringTransactionFrequency || 'monthly',
-			recurringTransactionDefaultCategory: settingsData?.recurringTransactionDefaultCategory || null,
+			defaultPaymentMethod: 'UPI',
+			defaultCurrency: 'INR',
+			financialMonthStart: 1,
+			financialMonthEnd: 31,
+			weeklyStartDay: 'Sunday',
+			monthlyBudgetLimit: 0,
+			budgetNotificationsEnabled: true,
+			transactionReminders: true,
+			favoriteCategories: [],
+			defaultView: 'list',
+			recurringTransactionFrequency: 'monthly',
+			recurringTransactionDefaultCategory: null,
 		},
 	});
+
+	useEffect(() => {
+		if (settings) {
+			console.log('resetting form');
+			form.reset({
+				defaultPaymentMethod: settings.defaultPaymentMethod || 'UPI',
+				defaultCurrency: settings.defaultCurrency || 'INR',
+				financialMonthStart: settings.financialMonthStart || 1,
+				financialMonthEnd: settings.financialMonthEnd || 31,
+				weeklyStartDay: settings.weeklyStartDay || 'Sunday',
+				monthlyBudgetLimit: settings.monthlyBudgetLimit || 0,
+				budgetNotificationsEnabled: settings.budgetNotificationsEnabled ?? true,
+				transactionReminders: settings.transactionReminders ?? true,
+				favoriteCategories: settings.favoriteCategories || [],
+				defaultView: settings.defaultView || 'list',
+				recurringTransactionFrequency: settings.recurringTransactionFrequency || 'monthly',
+				recurringTransactionDefaultCategory: settings.recurringTransactionDefaultCategory || null,
+			});
+		}
+	}, [settings]);
 
 	const onSubmit = async (data: SettingsFormData) => {
 		await updateUserSettings(data, {
@@ -78,6 +96,14 @@ const Settings = () => {
 			: [...favorites, category];
 		form.setValue('favoriteCategories', updated);
 	};
+
+	if (isLoading) {
+		return (
+			<div className="w-screen h-screen flex justify-center items-center">
+				<Loader2 className="animate-spin" />
+			</div>
+		);
+	}
 
 	return (
 		<div className="container mx-auto px-4 py-8">
@@ -96,7 +122,7 @@ const Settings = () => {
 									<div className="space-y-2">
 										<FormLabel htmlFor="payment-method">Payment Method</FormLabel>
 										<FormControl>
-											<Select {...field}>
+											<Select value={field.value} onValueChange={field.onChange}>
 												<SelectTrigger className="w-40" id="payment-method">
 													<SelectValue placeholder="Select payment method" />
 												</SelectTrigger>
@@ -121,7 +147,7 @@ const Settings = () => {
 									<div className="space-y-2">
 										<FormLabel htmlFor="currency">Currency</FormLabel>
 										<FormControl>
-											<Select {...field}>
+											<Select value={field.value} onValueChange={field.onChange}>
 												<SelectTrigger className="w-40" id="currency">
 													<SelectValue placeholder="Select currency" />
 												</SelectTrigger>
@@ -243,7 +269,7 @@ const Settings = () => {
 										<FormControl>
 											<Input
 												type="number"
-												value={field.value ?? ''}
+												value={field.value?.toString() ?? ''}
 												onChange={(e) => field.onChange(Number(e.target.value))}
 												placeholder="Enter budget limit"
 											/>

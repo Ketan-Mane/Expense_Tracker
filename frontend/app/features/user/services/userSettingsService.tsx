@@ -6,7 +6,7 @@ const API_BASE = '/settings';
 
 export const getUserSettings = async () => {
 	const { data } = await axiosInstance.get<ApiResponse<{ settings: SettingsFormData }>>(API_BASE);
-	return data;
+	return data.data?.settings;
 };
 
 export const updateUserSettings = async (settings: SettingsFormData) => {

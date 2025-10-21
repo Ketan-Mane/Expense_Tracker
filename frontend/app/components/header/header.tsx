@@ -17,7 +17,11 @@ const Header = () => {
 			<div className="container mx-auto px-4 py-6">
 				<div className="flex items-center justify-between">
 					<div>
-						<h1 className="text-3xl font-bold">Expense Tracker</h1>
+						<h1 className="text-3xl font-bold">
+							<Link to="/">
+								Expense <span className="text-purple-600">Tracker</span>
+							</Link>
+						</h1>
 						<p className="text-muted-foreground">Manage your finances with ease</p>
 					</div>
 					<div className="flex items-center gap-2">

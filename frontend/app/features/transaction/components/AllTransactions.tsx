@@ -11,12 +11,6 @@ import ListTransactions from './ListTransactions';
 import useCategories from '~/features/category/hooks/use-categories';
 import useDebounce from '~/hooks/use-debounce';
 
-function formatCurrency(amount: number) {
-	return new Intl.NumberFormat('en-US', {
-		style: 'currency',
-		currency: 'USD',
-	}).format(Math.abs(amount));
-}
 
 function formatDate(dateString: string) {
 	return new Date(dateString).toLocaleDateString('en-US', {

@@ -1,13 +1,14 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
-import { Button } from "~/components/ui/button";
-import { Plus, Settings2 } from "lucide-react";
-import Modal from "~/components/common/modal";
-import CategoryForm from "~/features/category/components/CategoryForm";
-import { formatCurrency } from "~/lib/utils";
-import ListCategory from "~/features/category/components/ListCategory";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card';
+import { Button } from '~/components/ui/button';
+import { Plus, Settings2 } from 'lucide-react';
+import Modal from '~/components/common/modal';
+import CategoryForm from '~/features/category/components/CategoryForm';
+import ListCategory from '~/features/category/components/ListCategory';
+import useFormatCurrency from '~/hooks/use-format-currency';
 
 export function CategoryManager() {
 	const totalBudget = 10000;
+	const formatCurrency = useFormatCurrency();
 
 	return (
 		<Card>

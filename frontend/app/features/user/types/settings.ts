@@ -6,7 +6,7 @@ export const settingsSchema = z.object({
 	financialMonthStart: z.number().min(1).max(31).optional(),
 	financialMonthEnd: z.number().min(1).max(31).optional(),
 	weeklyStartDay: z.enum(['Sunday', 'Monday']).optional(),
-	monthlyBudgetLimit: z.number().min(0).optional(),
+	monthlyBudgetLimit: z.coerce.number().min(0).optional(),
 	budgetNotificationsEnabled: z.boolean().optional(),
 	transactionReminders: z.boolean().optional(),
 	favoriteCategories: z.array(z.string()).optional(),

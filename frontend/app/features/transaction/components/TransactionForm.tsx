@@ -12,6 +12,7 @@ import Modal from '~/components/common/modal';
 import CategoryForm from '~/features/category/components/CategoryForm';
 import { PAYMENT_MODES, TRANSACTION_TYPES } from '~/lib/constant';
 import useUpdateTransaction from '../hooks/use-update-transaction';
+import { useUserSettings } from '~/features/user/hooks/use-user-settings';
 
 interface TransactionFormProps {
 	transaction?: Transaction;
@@ -22,6 +23,7 @@ const TransactionForm = ({ transaction, close }: TransactionFormProps) => {
 	const { data } = useCategories();
 	const { mutateAsync: createTransaction, isPending: isCreating } = useCreateTransaction();
 	const { mutateAsync: updateTransaction, isPending: isUpdating } = useUpdateTransaction();
+	const { data: settings } = useUserSettings();
 
 	const categories = data?.categories || [];
 
@@ -33,7 +35,7 @@ const TransactionForm = ({ transaction, close }: TransactionFormProps) => {
 			amount: transaction?.amount || 0,
 			description: transaction?.description || '',
 			date: new Date(transaction?.date || new Date()),
-			paymentMethod: transaction?.paymentMethod || 'UPI',
+			paymentMethod: transaction?.paymentMethod || settings?.defaultPaymentMethod || 'UPI',
 			isRecurring: transaction?.isRecurring || false,
 			type: transaction?.type || 'Expense',
 			category: transaction?.category || {

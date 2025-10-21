@@ -7,8 +7,8 @@ export const useUpdateUserSettings = () => {
 
 	return useMutation({
 		mutationFn: (settings: SettingsFormData) => updateUserSettings(settings),
-		onSuccess: (data) => {
-			queryClient.setQueryData(['userSettings'], data);
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['userSettings'] });
 		},
 	});
 };
