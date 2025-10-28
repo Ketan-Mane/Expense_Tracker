@@ -1,16 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
-import { verifyAuth } from "../services/authService";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { setUser } from "../slices/authSlice";
-import { useNavigate } from "react-router";
+import { useQuery } from '@tanstack/react-query';
+import { verifyAuth } from '../services/authService';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../slices/authSlice';
 
 const useAuth = () => {
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
 
-	const { data: user } = useQuery({
-		queryKey: ["auth"],
+	const { data: user, isLoading } = useQuery({
+		queryKey: ['auth'],
 		queryFn: verifyAuth,
 		retry: false,
 	});
@@ -19,10 +17,9 @@ const useAuth = () => {
 		if (!user) return;
 
 		dispatch(setUser(user));
-		navigate("/");
 	}, [user]);
 
-	return { isLoggedIn: !!user, user };
+	return { isLoggedIn: !!user, user, isLoading };
 };
 
 export default useAuth;

@@ -19,13 +19,18 @@ const register = asyncHandler(async (req: Request, res: Response) => {
 
 const login = asyncHandler(async (req: Request, res: Response) => {
 	const { provider } = req.params;
-	return res.oidc.login({
-		returnTo: process.env.APP_URL + "/api/auth/callback",
-		authorizationParams: {
-			connection: provider || "google-oauth2",
-			prompt: "select_account",
-		},
-	});
+	try {
+		return res.oidc.login({
+			returnTo: process.env.APP_URL + "/api/auth/callback",
+			authorizationParams: {
+				connection: provider || "google-oauth2",
+				prompt: "select_account",
+			},
+		});
+	} catch (error) {
+		console.log(error);
+		return res.redirect(process.env.FRONTEND_URL!);
+	}
 	// const { email, password } = req.body;
 
 	// const user = await User.scope("withPassword").findOne({ where: { email } });

@@ -1,5 +1,5 @@
 import { Button } from '../ui/button';
-import { Settings } from 'lucide-react';
+import { Home, Settings } from 'lucide-react';
 import LogoutButton from '~/features/auth/components/Logout';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useSelector } from 'react-redux';
@@ -26,9 +26,14 @@ const Header = () => {
 					</div>
 					<div className="flex items-center gap-2">
 						<Button variant="outline" size="sm" asChild>
+							<Link to="/">
+								<Home className="h-4 w-4" />
+							</Link>
+						</Button>
+						<Button variant="outline" size="sm" asChild>
 							<Link to="settings">
-								<Settings className="h-4 w-4 mr-2" />
-								Settings
+								<Settings className="h-4 w-4" />
+								{/* Settings */}
 							</Link>
 						</Button>
 						{user && (

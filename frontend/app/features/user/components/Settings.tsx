@@ -14,6 +14,7 @@ import useCategories from '~/features/category/hooks/use-categories';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import clsx from 'clsx';
 
 const paymentMethods = [
 	'Credit Card',
@@ -64,21 +65,7 @@ const Settings = () => {
 
 	useEffect(() => {
 		if (settings) {
-			console.log('resetting form');
-			form.reset({
-				defaultPaymentMethod: settings.defaultPaymentMethod || 'UPI',
-				defaultCurrency: settings.defaultCurrency || 'INR',
-				financialMonthStart: settings.financialMonthStart || 1,
-				financialMonthEnd: settings.financialMonthEnd || 31,
-				weeklyStartDay: settings.weeklyStartDay || 'Sunday',
-				monthlyBudgetLimit: settings.monthlyBudgetLimit || 0,
-				budgetNotificationsEnabled: settings.budgetNotificationsEnabled ?? true,
-				transactionReminders: settings.transactionReminders ?? true,
-				favoriteCategories: settings.favoriteCategories || [],
-				defaultView: settings.defaultView || 'list',
-				recurringTransactionFrequency: settings.recurringTransactionFrequency || 'monthly',
-				recurringTransactionDefaultCategory: settings.recurringTransactionDefaultCategory || null,
-			});
+			form.reset(settings);
 		}
 	}, [settings]);
 
@@ -94,21 +81,19 @@ const Settings = () => {
 		const updated = favorites.includes(category)
 			? favorites.filter((c) => c !== category)
 			: [...favorites, category];
+
 		form.setValue('favoriteCategories', updated);
 	};
 
-	if (isLoading) {
-		return (
-			<div className="w-screen h-screen flex justify-center items-center">
-				<Loader2 className="animate-spin" />
-			</div>
-		);
-	}
+	const favoriteCategories = form.watch('favoriteCategories') || [];
 
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+				<form
+					onSubmit={form.handleSubmit(onSubmit)}
+					className={clsx('space-y-4', isLoading && 'opacity-50 pointer-events-none animate-pulse')}
+				>
 					<Card>
 						<CardHeader>
 							<CardTitle>General Settings</CardTitle>
@@ -320,21 +305,20 @@ const Settings = () => {
 					</Card>
 
 					{/* Favorite Categories */}
-					{/* <Card>
+					<Card>
 						<CardHeader>
 							<CardTitle>Favorite Categories</CardTitle>
 						</CardHeader>
 						<CardContent>
 							<div className="flex flex-wrap gap-2">
 								{categories.map((c) => {
-									const favorites = form.getValues('favoriteCategories') || [];
-									const isFav = favorites.includes(c);
+									const isFav = favoriteCategories.includes(c.id);
 									return (
 										<Badge
 											key={c.id}
 											variant={isFav ? 'default' : 'outline'}
 											className="cursor-pointer px-3 py-1.5"
-											onClick={() => toggleFavoriteCategory(c)}
+											onClick={() => toggleFavoriteCategory(c.id)}
 										>
 											{c.name} {isFav && <X className="ml-1 h-3 w-3" />}
 										</Badge>
@@ -342,7 +326,7 @@ const Settings = () => {
 								})}
 							</div>
 						</CardContent>
-					</Card> */}
+					</Card>
 
 					{/* Save & Reset */}
 					<div className="flex justify-end gap-2">
