@@ -13,7 +13,9 @@ export function RecentTransactions() {
 				<CardDescription>Your latest financial activity</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<ListTransactions transactions={transactions} />
+				<div className="w-full overflow-x-auto rounded-md border">
+					<ListTransactions transactions={transactions} />
+				</div>
 			</CardContent>
 		</Card>
 	);

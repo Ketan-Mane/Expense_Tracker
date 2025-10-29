@@ -14,7 +14,7 @@ const useLogin = () => {
 			const { data } = responseData;
 			if (data?.user === null) return;
 			dispatch(setUser(data?.user));
-			navigate("/");
+			navigate("/dashboard", { replace: true });
 		},
 		onError: (error) => {
 			console.error("Login failed", error);

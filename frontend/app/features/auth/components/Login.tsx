@@ -68,7 +68,7 @@ export default function Login() {
 						</Button>
 					</div>
 
-					<div className="relative my-6">
+					{/* <div className="relative my-6">
 						<div className="absolute inset-0 flex items-center">
 							<div className="w-full border-t border-gray-200"></div>
 						</div>
@@ -81,7 +81,7 @@ export default function Login() {
 						By continuing, you agree to our{' '}
 						<button className="text-blue-600 hover:underline">Terms of Service</button> and{' '}
 						<button className="text-blue-600 hover:underline">Privacy Policy</button>
-					</p>
+					</p> */}
 				</CardContent>
 			</Card>
 		</div>

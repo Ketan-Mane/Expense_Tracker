@@ -2,15 +2,24 @@ import useTransactions from '~/features/transaction/hooks/use-transactions';
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
 import { BarChart3, Settings2, Home, Receipt } from 'lucide-react';
 import clsx from 'clsx';
+import { useLocation, useNavigate } from 'react-router';
 
 interface NavigationProps {
 	activeTab: string;
 	onTabChange: (tab: string) => void;
 }
 
-export function Navigation({ activeTab, onTabChange }: NavigationProps) {
+export function Navigation() {
+	const location = useLocation();
+	const navigate = useNavigate();
 	const { data } = useTransactions();
 	const transactions = data?.transactions || [];
+
+	const activeTab = location.pathname.split('/')[1] || 'dashboard';
+
+	const onTabChange = (tab: string) => {
+		navigate(`/${tab}`);
+	};
 
 	return (
 		<Tabs value={activeTab} onValueChange={onTabChange} className="w-full text-sm">
