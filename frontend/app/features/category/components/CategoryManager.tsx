@@ -13,7 +13,7 @@ export function CategoryManager() {
 	return (
 		<Card>
 			<CardHeader>
-				<div className="flex items-center justify-between">
+				<div className="flex max-md:flex-col gap-2 items-center justify-between">
 					<div>
 						<CardTitle className="flex items-center gap-2">
 							<Settings2 className="h-5 w-5" />
@@ -27,7 +27,7 @@ export function CategoryManager() {
 					<Modal
 						title="Add New Category"
 						button={
-							<Button>
+							<Button className="self-end">
 								<Plus />
 								Add Category
 							</Button>

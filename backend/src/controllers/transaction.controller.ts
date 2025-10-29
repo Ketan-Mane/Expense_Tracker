@@ -32,7 +32,9 @@ const createTransaction = asyncHandler(async (req: Request, res: Response) => {
 const updateTransaction = asyncHandler(async (req: Request, res: Response) => {
 	const { id } = req.params;
 	const updates = req.body;
-	const transaction = await transactionService.updateTransaction(id, updates);
+	const user = req.user;
+
+	const transaction = await transactionService.updateTransaction(id, user.id, updates);
 	res.status(200).json(new ApiResponse(200, "Transaction updated", { transaction }));
 });
 
@@ -43,7 +45,8 @@ const deleteTransaction = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const getCategoryAnalytics = asyncHandler(async (req: Request, res: Response) => {
-	const analytics = await transactionService.getCategoryAnalytics();
+	const month = req.query.month as string;
+	const analytics = await transactionService.getCategoryAnalytics(month);
 	res.status(200).json(new ApiResponse(200, "Success", analytics));
 });
 

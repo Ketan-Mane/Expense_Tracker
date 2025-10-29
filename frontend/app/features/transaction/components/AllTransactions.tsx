@@ -108,10 +108,10 @@ const AllTransactions = () => {
 							<CardTitle>All Transactions</CardTitle>
 							<CardDescription>View and filter all your transactions</CardDescription>
 						</div>
-						<Button onClick={handleExport} variant="outline" size="sm">
+						{/* <Button onClick={handleExport} variant="outline" size="sm">
 							<Download className="h-4 w-4 mr-2" />
 							Export
-						</Button>
+						</Button> */}
 					</div>
 				</CardHeader>
 				<CardContent className="space-y-4">

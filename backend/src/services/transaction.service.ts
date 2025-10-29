@@ -77,16 +77,46 @@ const createTransaction = async (data: TransactionCreationAttributes, userId: st
 		...data,
 		categoryId: data.categoryId,
 		monthId: month.id,
-		paymentMethod: "UPI",
+		paymentMethod: data.paymentMethod,
 	});
 	return transaction;
 };
 
-const updateTransaction = async (id: string, updates: Partial<TransactionCreationAttributes>): Promise<Transaction> => {
+const updateTransaction = async (
+	id: string,
+	userId: string,
+	updates: Partial<TransactionCreationAttributes>
+): Promise<Transaction> => {
 	const transaction = await Transaction.findByPk(id);
 	if (!transaction) {
 		throw new Error("Transaction not found");
 	}
+
+	const date = updates.date;
+	if (!dayjs(date).isSame(transaction.date, "day")) {
+		let month = await Month.findOne({
+			where: {
+				userId,
+				startDate: { [Op.lte]: date },
+				endDate: { [Op.gte]: date },
+			},
+		});
+
+		if (!month) {
+			const startDate = dayjs(date).startOf("month").toDate();
+			const endDate = dayjs(date).endOf("month").toDate();
+
+			month = await Month.create({
+				userId,
+				name: `${dayjs(date).format("MMMM YYYY")}`,
+				startDate,
+				endDate,
+			});
+		}
+
+		updates.monthId = month.id;
+	}
+
 	await transaction.update(updates);
 	return transaction;
 };
@@ -99,11 +129,13 @@ const deleteTransaction = async (id: string): Promise<void> => {
 	await transaction.destroy();
 };
 
-const getCategoryAnalytics = async () => {
+const getCategoryAnalytics = async (monthName?: string) => {
+	const date = dayjs(monthName).utc(true).startOf("month").toDate();
+	console.log({ date });
 	const month = await Month.findOne({
 		where: {
-			startDate: { [Op.lte]: new Date() },
-			endDate: { [Op.gte]: new Date() },
+			startDate: { [Op.lte]: date },
+			endDate: { [Op.gte]: date },
 		},
 	});
 
