@@ -1,27 +1,30 @@
 import ApiResponse from "@helper/ApiResponse";
 import { asyncHandler } from "@helper/asyncHandler";
+import User from "@models/user.model";
 import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken";
-
-interface TokenPayload extends jwt.JwtPayload {
-	sub: string;
-}
 
 const authMiddleware = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-	const token = req.cookies.accessToken || req.headers.authorization?.split(" ")[1];
-	if (!token) {
+	if (!req.oidc || !req.oidc.isAuthenticated()) {
 		return res.status(401).json(new ApiResponse(401, "Unauthorized", null));
 	}
-	
-	try {
-		const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as TokenPayload;
 
-		req.user = { id: decoded.sub };
-
-		next();
-	} catch (error) {
-		return res.status(401).json(new ApiResponse(401, "Unauthorized: Invalid or expired token", null));
+	const auth0User = req.oidc.user;
+	if (!auth0User?.sub) {
+		await res.oidc.logout({ returnTo: process.env.FRONTEND_URL });
+		return res.status(401).json(new ApiResponse(401, "Missing Auth0 user", null));
 	}
+
+	const user = await User.findOne({
+		where: { auth0Id: auth0User.sub },
+	});
+
+	if (!user) {
+		await res.oidc.logout({ returnTo: process.env.FRONTEND_URL });
+		return res.status(401).json(new ApiResponse(401, "User not found", null));
+	}
+
+	req.user = user;
+	next();
 });
 
 export default authMiddleware;

@@ -28,7 +28,7 @@ app.use(
 	auth({
 		authRequired: false,
 		auth0Logout: true,
-		baseURL: "http://localhost:8000",
+		baseURL: process.env.APP_URL,
 		clientSecret: process.env.AUTH0_CLIENT_SECRET,
 		clientID: process.env.AUTH0_CLIENT_ID,
 		secret: "Ketan-Mane",

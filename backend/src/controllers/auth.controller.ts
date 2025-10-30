@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { validationResult } from "express-validator";
 import ApiError from "@helper/ApiError";
 import User from "@models/user.model";
 import { asyncHandler } from "@helper/asyncHandler";
@@ -21,7 +20,7 @@ const login = asyncHandler(async (req: Request, res: Response) => {
 	const { provider } = req.params;
 	try {
 		return res.oidc.login({
-			returnTo: process.env.APP_URL + "/api/auth/callback",
+			returnTo: process.env.FRONTEND_URL,
 			authorizationParams: {
 				connection: provider || "google-oauth2",
 				prompt: "select_account",
@@ -31,24 +30,9 @@ const login = asyncHandler(async (req: Request, res: Response) => {
 		console.log(error);
 		return res.redirect(process.env.FRONTEND_URL!);
 	}
-	// const { email, password } = req.body;
-
-	// const user = await User.scope("withPassword").findOne({ where: { email } });
-	// if (!user) {
-	// 	throw new ApiError("Invalid credentials", 400, null);
-	// }
-
-	// const isPasswordMatch = user.isValidPassword(password);
-	// if (!isPasswordMatch) {
-	// 	throw new ApiError("Invalid credentials", 400, null);
-	// }
-	// const accessToken = user.generateAccessToken();
-	// res.cookie("accessToken", accessToken, { httpOnly: true });
-	// res.status(200).json(new ApiResponse(200, "success", { user: user.toJSON(), accessToken }));
 });
 
 const logout = asyncHandler(async (req: Request, res: Response) => {
-	res.clearCookie("accessToken");
 	return res.oidc.logout({
 		returnTo: process.env.FRONTEND_URL,
 	});
@@ -65,32 +49,4 @@ const checkAuth = asyncHandler(async (req: Request, res: Response) => {
 	}
 	res.status(200).json(new ApiResponse(200, "success", { user }));
 });
-
-const auth0Callback = asyncHandler(async (req: Request, res: Response) => {
-	const auth0User: any = req.oidc.user; // Info from Auth0
-	if (!auth0User) {
-		throw new ApiError("Auth0 login failed", 400);
-	}
-
-	const {
-		email,
-		name,
-		sub: auth0Id,
-		picture,
-	}: { email: string; name: string; sub: string; picture: string } = auth0User;
-
-	let user = await User.findOne({ where: { email } });
-
-	if (!user) {
-		user = await User.create({ email, name, auth0Id, avatarUrl: picture });
-	}
-
-	// 3️⃣ Generate your own JWT
-	const accessToken = user.generateAccessToken();
-
-	// 4️⃣ Set JWT in httpOnly cookie
-	res.cookie("accessToken", accessToken, { httpOnly: true });
-	return res.redirect(process.env.FRONTEND_URL!);
-});
-
-export default { register, login, logout, checkAuth, auth0Callback };
+export default { register, login, logout, checkAuth };

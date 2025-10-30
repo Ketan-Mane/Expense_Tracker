@@ -10,5 +10,4 @@ router.route("/signup").post(userValidator, validate, authController.register);
 router.route("/login/:provider").get(authController.login);
 router.route("/logout").get(authMiddleware, authController.logout);
 router.route("/me").get(authMiddleware, authController.checkAuth);
-router.route("/callback").get(authController.auth0Callback);
 export default router;
