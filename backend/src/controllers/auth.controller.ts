@@ -47,6 +47,6 @@ const checkAuth = asyncHandler(async (req: Request, res: Response) => {
 	if (!user) {
 		throw new ApiError("User not found", 404, null);
 	}
-	res.status(200).json(new ApiResponse(200, "success", { user }));
+	return res.status(200).json(new ApiResponse(200, "success", { user }));
 });
 export default { register, login, logout, checkAuth };

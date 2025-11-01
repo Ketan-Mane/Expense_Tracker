@@ -1,3 +1,4 @@
+import "module-alias/register";
 import express, { Application } from "express";
 import cookieParser from "cookie-parser";
 import errorHandler from "@middlewares/errorHandler.middleware";
@@ -11,6 +12,7 @@ import userSettings from "@routes/userSettings.route";
 import { auth } from "express-openid-connect";
 import morgan from "morgan";
 import cors from "cors";
+import { createOrUpdateUserMiddleware } from "@middlewares/createOrUpdateUser.middleware";
 
 const app: Application = express();
 app.use(
@@ -42,6 +44,7 @@ app.use(
 	})
 );
 
+app.use(createOrUpdateUserMiddleware);
 app.use("/api/auth", authRouter);
 app.use(authMiddleware);
 app.use("/api/transactions", transactionRouter);

@@ -10,7 +10,7 @@ const authMiddleware = asyncHandler(async (req: Request, res: Response, next: Ne
 
 	const auth0User = req.oidc.user;
 	if (!auth0User?.sub) {
-		await res.oidc.logout({ returnTo: process.env.FRONTEND_URL });
+		// await res.oidc.logout({ returnTo: process.env.FRONTEND_URL });
 		return res.status(401).json(new ApiResponse(401, "Missing Auth0 user", null));
 	}
 
@@ -19,7 +19,7 @@ const authMiddleware = asyncHandler(async (req: Request, res: Response, next: Ne
 	});
 
 	if (!user) {
-		await res.oidc.logout({ returnTo: process.env.FRONTEND_URL });
+		// await res.oidc.logout({ returnTo: process.env.FRONTEND_URL });
 		return res.status(401).json(new ApiResponse(401, "User not found", null));
 	}
 
