@@ -9,7 +9,7 @@ const getMonths = asyncHandler(async (req: Request, res: Response) => {
 	res.status(200).json(new ApiResponse(200, "Success", { months, metadata }));
 });
 
-const getMonth = asyncHandler(async (req: Request, res: Response) => {
+const getMonth = asyncHandler(async (req: Request<{ id: string }>, res: Response) => {
 	const { id } = req.params;
 	const month = await monthService.getMonth(id);
 	res.status(200).json(new ApiResponse(200, "Success", { month }));
@@ -22,14 +22,14 @@ const createMonth = asyncHandler(async (req: Request, res: Response) => {
 	res.status(201).json(new ApiResponse(201, "Month created", { month }));
 });
 
-const updateMonth = asyncHandler(async (req: Request, res: Response) => {
+const updateMonth = asyncHandler(async (req: Request<{ id: string }>, res: Response) => {
 	const { id } = req.params;
 	const updates = req.body;
 	const month = await monthService.updateMonth(id, updates);
 	res.status(200).json(new ApiResponse(200, "Month updated", { month }));
 });
 
-const deleteMonth = asyncHandler(async (req: Request, res: Response) => {
+const deleteMonth = asyncHandler(async (req: Request<{ id: string }>, res: Response) => {
 	const { id } = req.params;
 	await monthService.deleteMonth(id);
 	res.status(204).send();

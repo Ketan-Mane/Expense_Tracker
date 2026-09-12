@@ -29,7 +29,7 @@ const createTransaction = asyncHandler(async (req: Request, res: Response) => {
 	res.status(201).json(new ApiResponse(201, "Transaction created", { transaction }));
 });
 
-const updateTransaction = asyncHandler(async (req: Request, res: Response) => {
+const updateTransaction = asyncHandler(async (req: Request<{ id: string }>, res: Response) => {
 	const { id } = req.params;
 	const updates = req.body;
 	const user = req.user;
@@ -38,7 +38,7 @@ const updateTransaction = asyncHandler(async (req: Request, res: Response) => {
 	res.status(200).json(new ApiResponse(200, "Transaction updated", { transaction }));
 });
 
-const deleteTransaction = asyncHandler(async (req: Request, res: Response) => {
+const deleteTransaction = asyncHandler(async (req: Request<{ id: string }>, res: Response) => {
 	const { id } = req.params;
 	await transactionService.deleteTransaction(id);
 	res.status(200).json(new ApiResponse(200, "Transaction deleted"));

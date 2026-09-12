@@ -22,8 +22,8 @@ const createBudget = asyncHandler(async (req: Request, res: Response) => {
 	res.status(201).json(new ApiResponse(201, "Budget created successfully", { budget }));
 });
 
-const updateBudget = asyncHandler(async (req: Request, res: Response) => {
-	const budgetId = req.params.id;
+const updateBudget = asyncHandler(async (req: Request<{ id: string }>, res: Response) => {
+	const { id: budgetId } = req.params;
 	const budgetData = req.body;
 	const updatedBudget = await budgetService.updateBudget(budgetId, budgetData);
 	if (!updatedBudget) {
@@ -32,8 +32,8 @@ const updateBudget = asyncHandler(async (req: Request, res: Response) => {
 	res.status(200).json(new ApiResponse(200, "Budget updated successfully", { budget: updatedBudget }));
 });
 
-const deleteBudget = asyncHandler(async (req: Request, res: Response) => {
-	const budgetId = req.params.id;
+const deleteBudget = asyncHandler(async (req: Request<{ id: string }>, res: Response) => {
+	const { id: budgetId } = req.params;
 	const isDeleted = await budgetService.deleteBudget(budgetId);
 	if (!isDeleted) {
 		return res.status(404).json(new ApiResponse(404, "Budget not found"));
