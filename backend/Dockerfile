@@ -1,9 +1,11 @@
 FROM node:24-alpine AS build
 
 WORKDIR /app
-COPY . .
 
+COPY package*.json ./
 RUN npm ci
+
+COPY . .
 RUN npm run build
 
 
@@ -14,10 +16,9 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 COPY package*.json ./
+RUN npm ci --omit=dev
 
 COPY --from=build /app/dist ./dist
-
-RUN npm ci --omit=dev
 
 USER node
 

@@ -6,6 +6,7 @@ export function loader() {
 }
 
 export default function Login() {
+	console.log('API:', import.meta.env.VITE_SERVER_URL);
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4">
 			<Card className="w-full max-w-md shadow-lg">

@@ -11,8 +11,30 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql
+  
+  api:
+    build: ./backend
+    container_name: expense-tracker-api
+    depends_on:
+      - db
+    env_file:
+      - ./backend/.env
+    ports:
+      - "8000:8000"
 
+  frontend:
+    build: 
+      context: ./frontend
+      args:
+        VITE_SERVER_URL: http://localhost:8000/api
+    container_name: expense-tracker-frontend
+    depends_on:
+      - api
+    env_file:
+      - ./frontend/.env
+    ports:
+      - "3000:3000"
 
 volumes:
-  postgres_data:
+  pgdata:

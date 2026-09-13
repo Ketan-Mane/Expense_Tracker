@@ -19,7 +19,7 @@ app.use(
 	cors({
 		origin: [process.env.FRONTEND_URL!, process.env.AUTH0_DOMAIN!],
 		credentials: true,
-	})
+	}),
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -33,15 +33,14 @@ app.use(
 		baseURL: process.env.APP_URL,
 		clientSecret: process.env.AUTH0_CLIENT_SECRET,
 		clientID: process.env.AUTH0_CLIENT_ID,
-		secret: "Ketan-Mane",
+		secret: process.env.AUTH0_SECRET,
 		issuerBaseURL: process.env.AUTH0_DOMAIN,
 		authorizationParams: {
 			response_type: "code",
-			audience: "expense-tracker",
 			scope: "openid profile email offline_access",
 			prompt: "select_account",
 		},
-	})
+	}),
 );
 
 app.use(createOrUpdateUserMiddleware);
